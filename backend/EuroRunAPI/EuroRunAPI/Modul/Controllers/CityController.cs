@@ -9,23 +9,24 @@ namespace EuroRunAPI.Modul.Controllers
     [ApiController]
     [Route("[controller]/[action]")]
 
-    public class GradController : ControllerBase
+    public class CityController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-        public GradController(ApplicationDbContext context)
+        public CityController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         [HttpPost]
-        public async Task <ActionResult> Add([FromBody] GradAddVM GradAdd)
+        public async Task <ActionResult> Add([FromBody] CityAddVM CityAdd)
         {
-            var NoviGrad = new Grad
+            var NewCity = new City
             {
-                Naziv = GradAdd.Naziv,
+                Name = CityAdd.Name,
+                Country_id = CityAdd.Country_id,
 
             };
-            await _context.Gradovi.AddAsync(NoviGrad);
+            await _context.Cities.AddAsync(NewCity);
             await _context.SaveChangesAsync();
             return Ok();
         }
@@ -33,14 +34,15 @@ namespace EuroRunAPI.Modul.Controllers
         [HttpGet("id")]
         public async Task<ActionResult> GetById(int id)
         {
-            return Ok(await _context.Gradovi.FirstOrDefaultAsync(g=>g.Id==id));
+            return Ok(await _context.Cities.FirstOrDefaultAsync(g=>g.Id==id));
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Grad>>> GetAll ()
+        public async Task<ActionResult<List<City>>> GetAll ()
         {
-            var gradovi=await _context.Gradovi.ToListAsync();
-            return Ok(gradovi);
+            var cities=await _context.Cities.Include("Country").ToListAsync();
+            
+            return Ok(cities);
         }
     }
 }

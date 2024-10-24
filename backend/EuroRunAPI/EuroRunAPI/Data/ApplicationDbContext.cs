@@ -5,7 +5,9 @@ namespace EuroRunAPI.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Grad> Gradovi { get; set; }
+        public DbSet<City> Cities { get; set; }
+
+        public DbSet<Country> Countries { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
