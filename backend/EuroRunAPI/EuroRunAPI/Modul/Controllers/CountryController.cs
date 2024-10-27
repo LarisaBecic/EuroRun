@@ -30,5 +30,13 @@ namespace EuroRunAPI.Modul.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Country>>> GetAll()
+        {
+            var countries = await _context.Countries.ToListAsync();
+
+            return Ok(countries);
+        }
     }
 }

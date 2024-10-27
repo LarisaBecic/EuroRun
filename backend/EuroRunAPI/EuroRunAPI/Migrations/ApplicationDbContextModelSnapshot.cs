@@ -60,6 +60,34 @@ namespace EuroRunAPI.Migrations
                     b.ToTable("Countries");
                 });
 
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Location", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("City_id")
+                        .HasColumnType("int");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("City_id");
+
+                    b.ToTable("Locations");
+                });
+
             modelBuilder.Entity("EuroRunAPI.Modul.Models.City", b =>
                 {
                     b.HasOne("EuroRunAPI.Modul.Models.Country", "Country")
@@ -69,6 +97,17 @@ namespace EuroRunAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Location", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("City_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
                 });
 #pragma warning restore 612, 618
         }

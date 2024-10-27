@@ -9,6 +9,9 @@ namespace EuroRunAPI.Data
 
         public DbSet<Country> Countries { get; set; }
 
+        public DbSet<Location> Locations { get; set; }
+
+
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
