@@ -11,6 +11,16 @@ namespace EuroRunAPI.Data
 
         public DbSet<Location> Locations { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+
+        public DbSet<UserAccount> UserAccounts { get; set; }
+
+        public DbSet<User> Users { get; set; }
+
+        public DbSet<Administrator> Administrators { get; set; }
+
+
+
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
