@@ -19,6 +19,15 @@ namespace EuroRunAPI.Data
 
         public DbSet<Administrator> Administrators { get; set; }
 
+        public DbSet<EventType> EventTypes { get; set; }
+
+        public DbSet<Event> Events { get; set; }
+
+        public DbSet<Race> Races { get; set; }
+
+
+
+
 
 
 
