@@ -22,6 +22,114 @@ namespace EuroRunAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("EuroRunAPI.Modul.CreditCard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CardNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpirationDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SecurityNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("CreditCards");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Award", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Awards");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Challenge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Award_id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Award_id");
+
+                    b.ToTable("Challenges");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.ChallengeVerification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Challenge_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Event_id")
+                        .HasColumnType("int");
+
+                    b.Property<byte[]>("MedalPicture")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Verified")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Challenge_id");
+
+                    b.HasIndex("Event_id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("ChallengeVerifications");
+                });
+
             modelBuilder.Entity("EuroRunAPI.Modul.Models.City", b =>
                 {
                     b.Property<int>("Id")
@@ -98,6 +206,32 @@ namespace EuroRunAPI.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.EventRegistration", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Event_id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Event_id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("EventRegistrations");
+                });
+
             modelBuilder.Entity("EuroRunAPI.Modul.Models.EventType", b =>
                 {
                     b.Property<int>("Id")
@@ -147,6 +281,32 @@ namespace EuroRunAPI.Migrations
                     b.ToTable("Locations");
                 });
 
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Payment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CreditCard_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EventRegistration_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Total")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreditCard_id");
+
+                    b.HasIndex("EventRegistration_id");
+
+                    b.ToTable("Payments");
+                });
+
             modelBuilder.Entity("EuroRunAPI.Modul.Models.Race", b =>
                 {
                     b.Property<int>("Id")
@@ -170,6 +330,36 @@ namespace EuroRunAPI.Migrations
                     b.HasIndex("Event_id");
 
                     b.ToTable("Races");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Event_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Event_id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("EuroRunAPI.Modul.Models.Role", b =>
@@ -265,6 +455,55 @@ namespace EuroRunAPI.Migrations
                     b.HasDiscriminator().HasValue("User");
                 });
 
+            modelBuilder.Entity("EuroRunAPI.Modul.CreditCard", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Challenge", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.Models.Award", "Award")
+                        .WithMany()
+                        .HasForeignKey("Award_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Award");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.ChallengeVerification", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.Models.Challenge", "Challenge")
+                        .WithMany()
+                        .HasForeignKey("Challenge_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("EuroRunAPI.Modul.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("Event_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("EuroRunAPI.Modul.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Challenge");
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EuroRunAPI.Modul.Models.City", b =>
                 {
                     b.HasOne("EuroRunAPI.Modul.Models.Country", "Country")
@@ -295,6 +534,25 @@ namespace EuroRunAPI.Migrations
                     b.Navigation("Location");
                 });
 
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.EventRegistration", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("Event_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("EuroRunAPI.Modul.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("EuroRunAPI.Modul.Models.Location", b =>
                 {
                     b.HasOne("EuroRunAPI.Modul.Models.City", "City")
@@ -306,6 +564,25 @@ namespace EuroRunAPI.Migrations
                     b.Navigation("City");
                 });
 
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Payment", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.CreditCard", "CreditCard")
+                        .WithMany()
+                        .HasForeignKey("CreditCard_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EuroRunAPI.Modul.Models.EventRegistration", "EventRegistration")
+                        .WithMany()
+                        .HasForeignKey("EventRegistration_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreditCard");
+
+                    b.Navigation("EventRegistration");
+                });
+
             modelBuilder.Entity("EuroRunAPI.Modul.Models.Race", b =>
                 {
                     b.HasOne("EuroRunAPI.Modul.Models.Event", "Event")
@@ -315,6 +592,25 @@ namespace EuroRunAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.Review", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("Event_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("EuroRunAPI.Modul.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("User_id")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EuroRunAPI.Modul.Models.UserAccount", b =>
