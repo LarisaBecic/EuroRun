@@ -25,8 +25,13 @@ namespace EuroRunAPI.Data
 
         public DbSet<Race> Races { get; set; }
 
+        public DbSet<Award> Awards { get; set; }
 
+        public DbSet<Challenge> Challenges { get; set; }
 
+        public DbSet<ChallengeVerification> ChallengeVerifications { get; set; }
+
+        public DbSet<Review> Reviews { get; set; }
 
 
 

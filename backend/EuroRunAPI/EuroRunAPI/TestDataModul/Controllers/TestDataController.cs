@@ -136,6 +136,33 @@ namespace EuroRunAPI.TestDataModul.Controllers
             await _dbContext.Events.AddAsync(event1);
             await _dbContext.SaveChangesAsync();
 
+            var award1 = new Award
+            {
+                Name = "Gold",
+
+            };
+
+            await _dbContext.Awards.AddAsync(award1);
+            await _dbContext.SaveChangesAsync();
+
+            var award2 = new Award
+            {
+                Name = "Silver",
+
+            };
+
+            await _dbContext.Awards.AddAsync(award2);
+            await _dbContext.SaveChangesAsync();
+
+            var award3 = new Award
+            {
+                Name = "Bronze",
+
+            };
+
+            await _dbContext.Awards.AddAsync(award3);
+            await _dbContext.SaveChangesAsync();
+
             Dictionary<string, int> data = new Dictionary<string, int>();
             data.Add("Countries", _dbContext.Countries.Count());
             data.Add("Cities", _dbContext.Cities.Count());
@@ -144,7 +171,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
             data.Add("UserAccounts", _dbContext.UserAccounts.Count());
             data.Add("EventTypes", _dbContext.EventTypes.Count());
             data.Add("Events", _dbContext.Events.Count());
-            //data.Add("Races", _dbContext.Races.Count());
+            data.Add("Awards", _dbContext.Awards.Count());
 
 
             return Ok(data);
