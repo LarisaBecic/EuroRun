@@ -26,7 +26,7 @@ export class HomeComponent implements OnInit{
       'Accept': 'text/plain'
     });
   
-    this.http.get<Grad[]>("https://localhost:7249/Grad/GetAll", { headers })
+    this.http.get<Grad[]>("https://localhost:7249/City/GetAll", { headers })
       .subscribe(x => {
         this.gradoviLista = x;
       });
