@@ -12,9 +12,6 @@ namespace EuroRunAPI.Modul.Models
 
         public string Description { get; set; }
 
-        [ForeignKey(nameof(Award))]
-        public int Award_id { get; set; }
-        public Award Award { get; set; }
 
     }
 }

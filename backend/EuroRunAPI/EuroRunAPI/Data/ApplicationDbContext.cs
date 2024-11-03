@@ -40,6 +40,9 @@ namespace EuroRunAPI.Data
 
         public DbSet<Payment> Payments { get; set; }
 
+        public DbSet<ChallengeProgress> ChallengeProgresses { get; set; }
+
+
 
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
@@ -48,39 +51,29 @@ namespace EuroRunAPI.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ChallengeVerification>()
-               .HasOne(cv => cv.User)
-               .WithMany() 
-               .HasForeignKey(cv => cv.User_id)
-               .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<EventRegistration>()
+                .HasOne(e => e.User)
+                .WithMany()
+                .HasForeignKey(e => e.User_id)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<ChallengeVerification>()
-                .HasOne(cv => cv.Challenge)
-                .WithMany() 
-                .HasForeignKey(cv => cv.Challenge_id)
-                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<EventRegistration>()
+                .HasOne(e => e.Event)
+                .WithMany()
+                .HasForeignKey(e => e.Event_id)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<ChallengeVerification>()
                 .HasOne(cv => cv.Event)
                 .WithMany()
                 .HasForeignKey(cv => cv.Event_id)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Restrict);
 
-
-
-            modelBuilder.Entity<EventRegistration>()
-             .HasOne(er => er.User)   
-             .WithMany() 
-             .HasForeignKey(er => er.User_id)
-             .OnDelete(DeleteBehavior.NoAction); 
-
-            modelBuilder.Entity<EventRegistration>()
-                .HasOne(er => er.Event)
-                .WithMany() 
-                .HasForeignKey(er => er.Event_id)
-                .OnDelete(DeleteBehavior.NoAction); 
-
-
+            modelBuilder.Entity<ChallengeVerification>()
+                .HasOne(cv => cv.ChallengeProgress)
+                .WithMany()
+                .HasForeignKey(cv => cv.ChallengeProgress_id)
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.User)

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EuroRunAPI.Modul.Models
 {
@@ -9,6 +10,6 @@ namespace EuroRunAPI.Modul.Models
 
         public string Name { get; set; }
 
-
+      
     }
 }

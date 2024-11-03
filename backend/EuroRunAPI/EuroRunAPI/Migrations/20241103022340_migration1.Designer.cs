@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EuroRunAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241030170023_migration1")]
+    [Migration("20241103022340_migration1")]
     partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,9 +79,6 @@ namespace EuroRunAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Award_id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -92,9 +89,38 @@ namespace EuroRunAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Challenges");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.ChallengeProgress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Award_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Challenge_id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number_of_verifications")
+                        .HasColumnType("int");
+
+                    b.Property<int>("User_id")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("Award_id");
 
-                    b.ToTable("Challenges");
+                    b.HasIndex("Challenge_id");
+
+                    b.HasIndex("User_id");
+
+                    b.ToTable("ChallengeProgresses");
                 });
 
             modelBuilder.Entity("EuroRunAPI.Modul.Models.ChallengeVerification", b =>
@@ -105,29 +131,24 @@ namespace EuroRunAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("Challenge_id")
+                    b.Property<int>("ChallengeProgress_id")
                         .HasColumnType("int");
 
                     b.Property<int>("Event_id")
                         .HasColumnType("int");
 
+                    b.Property<bool>("IsVerified")
+                        .HasColumnType("bit");
+
                     b.Property<byte[]>("MedalPicture")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("User_id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Verified")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("Challenge_id");
+                    b.HasIndex("ChallengeProgress_id");
 
                     b.HasIndex("Event_id");
-
-                    b.HasIndex("User_id");
 
                     b.ToTable("ChallengeVerifications");
                 });
@@ -468,7 +489,7 @@ namespace EuroRunAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("EuroRunAPI.Modul.Models.Challenge", b =>
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.ChallengeProgress", b =>
                 {
                     b.HasOne("EuroRunAPI.Modul.Models.Award", "Award")
                         .WithMany()
@@ -476,34 +497,42 @@ namespace EuroRunAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Award");
-                });
-
-            modelBuilder.Entity("EuroRunAPI.Modul.Models.ChallengeVerification", b =>
-                {
                     b.HasOne("EuroRunAPI.Modul.Models.Challenge", "Challenge")
                         .WithMany()
                         .HasForeignKey("Challenge_id")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("EuroRunAPI.Modul.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("Event_id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("EuroRunAPI.Modul.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("User_id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Award");
 
                     b.Navigation("Challenge");
 
-                    b.Navigation("Event");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("EuroRunAPI.Modul.Models.ChallengeVerification", b =>
+                {
+                    b.HasOne("EuroRunAPI.Modul.Models.ChallengeProgress", "ChallengeProgress")
+                        .WithMany()
+                        .HasForeignKey("ChallengeProgress_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("EuroRunAPI.Modul.Models.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("Event_id")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ChallengeProgress");
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("EuroRunAPI.Modul.Models.City", b =>
@@ -541,13 +570,13 @@ namespace EuroRunAPI.Migrations
                     b.HasOne("EuroRunAPI.Modul.Models.Event", "Event")
                         .WithMany()
                         .HasForeignKey("Event_id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("EuroRunAPI.Modul.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("User_id")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Event");

@@ -23,6 +23,20 @@ namespace EuroRunAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Challenges",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Challenges", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
@@ -60,27 +74,6 @@ namespace EuroRunAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Challenges",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Award_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Challenges", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Challenges_Awards_Award_id",
-                        column: x => x.Award_id,
-                        principalTable: "Awards",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +185,40 @@ namespace EuroRunAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChallengeProgresses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    User_id = table.Column<int>(type: "int", nullable: false),
+                    Challenge_id = table.Column<int>(type: "int", nullable: false),
+                    Award_id = table.Column<int>(type: "int", nullable: false),
+                    Number_of_verifications = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChallengeProgresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChallengeProgresses_Awards_Award_id",
+                        column: x => x.Award_id,
+                        principalTable: "Awards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChallengeProgresses_Challenges_Challenge_id",
+                        column: x => x.Challenge_id,
+                        principalTable: "Challenges",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ChallengeProgresses_UserAccounts_User_id",
+                        column: x => x.User_id,
+                        principalTable: "UserAccounts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CreditCards",
                 columns: table => new
                 {
@@ -214,38 +241,6 @@ namespace EuroRunAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChallengeVerifications",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Verified = table.Column<bool>(type: "bit", nullable: false),
-                    MedalPicture = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    User_id = table.Column<int>(type: "int", nullable: false),
-                    Challenge_id = table.Column<int>(type: "int", nullable: false),
-                    Event_id = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ChallengeVerifications", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ChallengeVerifications_Challenges_Challenge_id",
-                        column: x => x.Challenge_id,
-                        principalTable: "Challenges",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ChallengeVerifications_Events_Event_id",
-                        column: x => x.Event_id,
-                        principalTable: "Events",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ChallengeVerifications_UserAccounts_User_id",
-                        column: x => x.User_id,
-                        principalTable: "UserAccounts",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EventRegistrations",
                 columns: table => new
                 {
@@ -262,12 +257,14 @@ namespace EuroRunAPI.Migrations
                         name: "FK_EventRegistrations_Events_Event_id",
                         column: x => x.Event_id,
                         principalTable: "Events",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_EventRegistrations_UserAccounts_User_id",
                         column: x => x.User_id,
                         principalTable: "UserAccounts",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -318,6 +315,34 @@ namespace EuroRunAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ChallengeVerifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    MedalPicture = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    ChallengeProgress_id = table.Column<int>(type: "int", nullable: false),
+                    Event_id = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ChallengeVerifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChallengeVerifications_ChallengeProgresses_ChallengeProgress_id",
+                        column: x => x.ChallengeProgress_id,
+                        principalTable: "ChallengeProgresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ChallengeVerifications_Events_Event_id",
+                        column: x => x.Event_id,
+                        principalTable: "Events",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Payments",
                 columns: table => new
                 {
@@ -345,24 +370,29 @@ namespace EuroRunAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Challenges_Award_id",
-                table: "Challenges",
+                name: "IX_ChallengeProgresses_Award_id",
+                table: "ChallengeProgresses",
                 column: "Award_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChallengeVerifications_Challenge_id",
-                table: "ChallengeVerifications",
+                name: "IX_ChallengeProgresses_Challenge_id",
+                table: "ChallengeProgresses",
                 column: "Challenge_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChallengeProgresses_User_id",
+                table: "ChallengeProgresses",
+                column: "User_id");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ChallengeVerifications_ChallengeProgress_id",
+                table: "ChallengeVerifications",
+                column: "ChallengeProgress_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ChallengeVerifications_Event_id",
                 table: "ChallengeVerifications",
                 column: "Event_id");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ChallengeVerifications_User_id",
-                table: "ChallengeVerifications",
-                column: "User_id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cities_Country_id",
@@ -450,7 +480,7 @@ namespace EuroRunAPI.Migrations
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "Challenges");
+                name: "ChallengeProgresses");
 
             migrationBuilder.DropTable(
                 name: "CreditCards");
@@ -460,6 +490,9 @@ namespace EuroRunAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Awards");
+
+            migrationBuilder.DropTable(
+                name: "Challenges");
 
             migrationBuilder.DropTable(
                 name: "Events");

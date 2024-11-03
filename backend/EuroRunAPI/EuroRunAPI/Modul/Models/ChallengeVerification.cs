@@ -8,17 +8,14 @@ namespace EuroRunAPI.Modul.Models
         [Key]
         public int Id { get; set; }
 
-        public bool Verified { get; set; }
+        public bool IsVerified { get; set; }
 
         public byte[] MedalPicture { get; set; }
 
-        [ForeignKey(nameof(User))]
-        public int User_id { get; set; }
-        public User User { get; set; }
 
-        [ForeignKey(nameof(Challenge))]
-        public int Challenge_id { get; set; }
-        public Challenge Challenge { get; set; }
+        [ForeignKey(nameof(ChallengeProgress))]
+        public int ChallengeProgress_id { get; set; }
+        public ChallengeProgress ChallengeProgress { get; set; }
 
         [ForeignKey(nameof(Event))]
         public int Event_id { get; set; }
