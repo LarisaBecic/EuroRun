@@ -7,6 +7,7 @@ import { HomeComponent } from './home/home.component';
 import { MarkdownModule } from 'ngx-markdown';
 import { RouterModule } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http"
             { path: '', component: HomeComponent },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]),
+      FormsModule,
     ],
   providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

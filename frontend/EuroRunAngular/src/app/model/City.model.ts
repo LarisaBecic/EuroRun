@@ -1,4 +1,4 @@
-export interface Grad{
+export interface City{
     id: number;
     name: string;
   }

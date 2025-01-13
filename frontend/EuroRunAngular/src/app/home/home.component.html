@@ -1,21 +1,39 @@
 <div class="container">
-  <h2>Gradovi</h2>
-  <table *ngIf="gradoviLista && gradoviLista.length > 0" class="table table-striped">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Naziv</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let grad of gradoviLista">
-        <td>{{ grad.id }}</td>
-        <td>{{ grad.name }}</td>
-      </tr>
-    </tbody>
-  </table>
+  <h2>Search Events by City</h2>
+  
+  <div class="form-group">
+    <label for="cityInput">Enter City:</label>
+    <input 
+      type="text" 
+      id="cityInput" 
+      class="form-control" 
+      [(ngModel)]="city" 
+      placeholder="Enter city name">
+  </div>
+  
+  <button class="btn btn-primary mt-2" (click)="GetEvents(city)">Search Events</button>
 
-  <div *ngIf="!gradoviLista || gradoviLista.length === 0">
-    <p>No data available</p>
+  <div *ngIf="eventlist && eventlist.length > 0" class="mt-4">
+    <h3>Events in {{ citytemp }}</h3>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Location</th>
+          <th>Event Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of eventlist">
+          <td>{{ event.name }}</td>
+          <td>{{ event.location.name }}</td>
+          <td>{{ event.eventType.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+  <div *ngIf="!eventlist || eventlist.length === 0" class="mt-4">
+    <p>No events available for the selected city.</p>
   </div>
 </div>

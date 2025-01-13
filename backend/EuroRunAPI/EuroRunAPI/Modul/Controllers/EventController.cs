@@ -43,9 +43,26 @@ namespace EuroRunAPI.Modul.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<City>>> GetAll()
+        public async Task<ActionResult<List<Event>>> GetAll()
         {
             var events = await _context.Events.Include("Location").Include("EventType").ToListAsync();
+
+            return Ok(events);
+        }
+
+        [HttpGet("search")]
+        public async Task<ActionResult<List<Event>>> SearchEvents(string city)
+        {
+            if (string.IsNullOrWhiteSpace(city))
+            {
+                return BadRequest("Query cannot be empty");
+            }
+
+            var events = await _context.Events
+                .Where(c => c.Location.City.Name.Contains(city))
+                .Include(c => c.Location).ThenInclude(l=>l.City)
+                .Include(c=>c.EventType)
+                .ToListAsync();
 
             return Ok(events);
         }
