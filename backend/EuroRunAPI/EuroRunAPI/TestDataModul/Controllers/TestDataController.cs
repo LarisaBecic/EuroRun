@@ -59,13 +59,35 @@ namespace EuroRunAPI.TestDataModul.Controllers
 
             var location1 = new Location
             {
-               Name="Vojanski most,Potoci",
-                Latitude=43.40812,
+               Name="Vojanski most, Potoci",
+                Latitude=43.4081,
                 Longitude=17.87184,
                 City_id=city2.Id,
             };
 
             await _dbContext.Locations.AddAsync(location1);
+            await _dbContext.SaveChangesAsync();
+
+            var location2 = new Location
+            {
+                Name = "Planinica, Mostar",
+                Latitude = 43.3866,
+                Longitude = 17.7700,
+                City_id = city2.Id,
+            };
+
+            await _dbContext.Locations.AddAsync(location2);
+            await _dbContext.SaveChangesAsync();
+
+            var location3 = new Location
+            {
+                Name = "Marijin Dvor ( ulica Zmaja od Bosne), Sarajevo",
+                Latitude = 43.8541,
+                Longitude = 18.3927,
+                City_id = city1.Id,
+            };
+
+            await _dbContext.Locations.AddAsync(location3);
             await _dbContext.SaveChangesAsync();
 
             var role1 = new Role
@@ -122,6 +144,16 @@ namespace EuroRunAPI.TestDataModul.Controllers
             await _dbContext.EventTypes.AddAsync(eventtype2);
             await _dbContext.SaveChangesAsync();
 
+            var eventtype3 = new EventType
+            {
+                Name = "Trail",
+                Description = "A trail race is a pedestrian competition open to everyone, which takes place in a natural environment, with the minimum possible of paved roads (20% maximum). The course can range from a few kilometers for short distances all the way to 80 kilometers and beyond for ultra-trail races."
+
+            };
+
+            await _dbContext.EventTypes.AddAsync(eventtype3);
+            await _dbContext.SaveChangesAsync();
+
             var event1 = new Event
             {
                 Name = "Mostar Half marathon",
@@ -134,6 +166,34 @@ namespace EuroRunAPI.TestDataModul.Controllers
             };
 
             await _dbContext.Events.AddAsync(event1);
+            await _dbContext.SaveChangesAsync();
+
+            var event2 = new Event
+            {
+                Name = "Mostar Challenge",
+                DateTime = new DateTime(2025, 5, 10, 8, 0, 0),
+                Description = "",
+                RegistrationDeadline = new DateTime(2025, 5, 8, 0, 0, 0),
+                EventType_id = eventtype3.Id,
+                Location_id = location2.Id,
+
+            };
+
+            await _dbContext.Events.AddAsync(event2);
+            await _dbContext.SaveChangesAsync();
+
+            var event3 = new Event
+            {
+                Name = "Sarajevo Half marathon",
+                DateTime = new DateTime(2025, 9, 21, 8, 30, 0),
+                Description = "",
+                RegistrationDeadline = new DateTime(2025, 9, 19, 0, 0, 0),
+                EventType_id = eventtype2.Id,
+                Location_id = location3.Id,
+
+            };
+
+            await _dbContext.Events.AddAsync(event3);
             await _dbContext.SaveChangesAsync();
 
             var award1 = new Award

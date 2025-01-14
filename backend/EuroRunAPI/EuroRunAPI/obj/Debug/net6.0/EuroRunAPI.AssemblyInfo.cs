@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EuroRunAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d48dc907335a2b41de5828b8f77f90d5700c240")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5ee295f2e9ba0e0a425fd943783c27812499a96a")]
 [assembly: System.Reflection.AssemblyProductAttribute("EuroRunAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EuroRunAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
