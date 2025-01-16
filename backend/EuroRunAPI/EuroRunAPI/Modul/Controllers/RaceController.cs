@@ -32,6 +32,42 @@ namespace EuroRunAPI.Modul.Controllers
             return Ok();
         }
 
+        [HttpPut("id")]
+        public async Task<ActionResult> Update(int id, [FromBody] RaceUpdateVM RaceUpdate)
+        {
+            var race = await _context.Races.FindAsync(id);
+
+            if (race != null)
+            {
+                race.Name = RaceUpdate.Name;
+                race.Event_id = RaceUpdate.Event_id;
+                race.Length = RaceUpdate.Length;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Race not found");
+            }
+        }
+
+        [HttpDelete("id")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var race = await _context.Races.FindAsync(id);
+
+            if (race != null)
+            {
+                _context.Races.Remove(race);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Race not found");
+            }
+        }
+
         [HttpGet("id")]
         public async Task<ActionResult> GetById(int id)
         {

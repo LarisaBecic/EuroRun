@@ -3,6 +3,7 @@ using EuroRunAPI.Modul.Models;
 using EuroRunAPI.Modul.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace EuroRunAPI.Modul.Controllers
 {
@@ -34,6 +35,45 @@ namespace EuroRunAPI.Modul.Controllers
             await _context.Events.AddAsync(NewEvent);
             await _context.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpPut("id")]
+        public async Task<ActionResult> Update(int id, [FromBody] EventUpdateVM EventUpdate)
+        {
+            var Event = await _context.Events.FindAsync(id);
+
+            if (Event != null)
+            {
+                Event.Name = EventUpdate.Name;
+                Event.Location_id = EventUpdate.Location_id;
+                Event.EventType_id = EventUpdate.EventType_id;
+                Event.DateTime = EventUpdate.DateTime;
+                Event.Description = EventUpdate.Description;
+                Event.RegistrationDeadline = EventUpdate.RegistrationDeadline;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Event not found");
+            }
+        }
+
+        [HttpDelete("id")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var Event = await _context.Events.FindAsync(id);
+
+            if (Event != null)
+            {
+                _context.Events.Remove(Event);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("Event not found");
+            }
         }
 
         [HttpGet("id")]

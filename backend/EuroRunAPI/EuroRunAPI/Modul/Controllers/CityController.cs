@@ -31,6 +31,41 @@ namespace EuroRunAPI.Modul.Controllers
             return Ok();
         }
 
+        [HttpPut("id")]
+        public async Task<ActionResult> Update(int id, [FromBody] CityUpdateVM CityUpdate)
+        {
+            var city = await _context.Cities.FindAsync(id);
+
+            if (city != null)
+            {
+                city.Name = CityUpdate.Name;
+                city.Country_id = CityUpdate.Country_id;
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("City not found");
+            }
+        }
+
+        [HttpDelete("id")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var city = await _context.Cities.FindAsync(id);
+
+            if (city != null)
+            {
+                _context.Cities.Remove(city);
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            else
+            {
+                return BadRequest("City not found");
+            }
+        }
+
         [HttpGet("id")]
         public async Task<ActionResult> GetById(int id)
         {

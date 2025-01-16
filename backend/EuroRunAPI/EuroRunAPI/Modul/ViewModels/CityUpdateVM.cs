@@ -1,6 +1,6 @@
 ﻿namespace EuroRunAPI.Modul.ViewModels
 {
-    public class CityAddVM
+    public class CityUpdateVM
     {
         public string Name { get; set; }
         public int Country_id { get; set; }
