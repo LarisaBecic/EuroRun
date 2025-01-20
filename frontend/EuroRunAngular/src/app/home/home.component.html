@@ -1,8 +1,8 @@
-<div class="container">
-  <h2>Search Events by City</h2>
+<div class="container mt-4">
+  <h2>Search events by city</h2>
   
   <div class="form-group">
-    <label for="cityInput">Enter City:</label>
+    <label for="cityInput">Enter city:</label>
     <input 
       type="text" 
       id="cityInput" 
@@ -11,7 +11,7 @@
       placeholder="Enter city name">
   </div>
   
-  <button class="btn btn-primary mt-2" (click)="GetEvents(city)">Search Events</button>
+  <button class="btn btn-primary mt-3" (click)="GetEvents(city)">Search events</button>
 
   <div *ngIf="eventlist && eventlist.length > 0" class="mt-4">
     <h3>Events in {{ citytemp }}</h3>
