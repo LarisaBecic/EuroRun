@@ -3,6 +3,7 @@ using EuroRunAPI.Modul.Models;
 using EuroRunAPI.Modul.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using EuroRunAPI.Helpers;
 
 namespace EuroRunAPI.Modul.Controllers
 {
@@ -12,9 +13,12 @@ namespace EuroRunAPI.Modul.Controllers
     public class UserAccountController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+        private readonly PasswordHasher _passwordHasher;
+
         public UserAccountController(ApplicationDbContext context)
         {
             _context = context;
+            _passwordHasher = new PasswordHasher();
         }
 
         [HttpPost]
@@ -32,6 +36,8 @@ namespace EuroRunAPI.Modul.Controllers
                 Role_id = UserAccountAdd.Role_id,
             };
 
+            string hashedPassword = _passwordHasher.HashPassword(NewUserAccount, UserAccountAdd.Password);
+            NewUserAccount.Password = hashedPassword;
     
             await _context.UserAccounts.AddAsync(NewUserAccount);
             await _context.SaveChangesAsync();
@@ -61,7 +67,7 @@ namespace EuroRunAPI.Modul.Controllers
                     UserName = user.UserName,
                     Picture = user.Picture != null ? Convert.ToBase64String(user.Picture) : null,
                     Active = user.Active,
-                    Role = user.Role,
+                    Role = user.Role
                 };
 
                 return Ok(userGet);

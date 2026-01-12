@@ -1,6 +1,7 @@
 ﻿using EuroRunAPI.Data;
 using EuroRunAPI.Modul.Models;
 using Microsoft.AspNetCore.Mvc;
+using EuroRunAPI.Helpers;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -13,10 +14,12 @@ namespace EuroRunAPI.TestDataModul.Controllers
     public class TestDataController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly PasswordHasher _passwordHasher;
 
         public TestDataController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
+            _passwordHasher = new PasswordHasher();
         }
 
 
@@ -81,7 +84,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
 
             var location3 = new Location
             {
-                Name = "Marijin Dvor ( ulica Zmaja od Bosne), Sarajevo",
+                Name = "Marijin Dvor (ulica Zmaja od Bosne), Sarajevo",
                 Latitude = 43.8541,
                 Longitude = 18.3927,
                 City_id = city1.Id,
@@ -116,10 +119,11 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 Email = "larisa.becic@edu.fit.ba",
                 UserName = "larisa.becic",
                 Active = true,
-                Role_id = role1.Id,
-                Password = "123456",
+                Role_id = role1.Id
+            };
 
-    };
+            string useraccount1password = _passwordHasher.HashPassword(useraccount1, "123456");
+            useraccount1.Password = useraccount1password;
 
             await _dbContext.UserAccounts.AddAsync(useraccount1);
             await _dbContext.SaveChangesAsync();

@@ -1,5 +1,6 @@
 ﻿using EuroRunAPI.Modul;
 using EuroRunAPI.Modul.Models;
+using EuroRunAPI.Authentification.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EuroRunAPI.Data
@@ -42,6 +43,8 @@ namespace EuroRunAPI.Data
 
         public DbSet<ChallengeProgress> ChallengeProgresses { get; set; }
 
+        public DbSet<AuthentificationToken> AuthentificationTokens { get; set; }
+
 
 
 
@@ -79,7 +82,7 @@ namespace EuroRunAPI.Data
                 .HasOne(r => r.User)
                 .WithMany()
                 .HasForeignKey(r => r.User_id)
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Event)
