@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EuroRunAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241103022340_migration1")]
+    [Migration("20250603175038_migration1")]
     partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
