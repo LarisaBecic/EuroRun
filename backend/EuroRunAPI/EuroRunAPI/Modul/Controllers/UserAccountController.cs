@@ -67,7 +67,7 @@ namespace EuroRunAPI.Modul.Controllers
                     UserName = user.UserName,
                     Picture = user.Picture != null ? Convert.ToBase64String(user.Picture) : null,
                     Active = user.Active,
-                    Role = user.Role
+                    Role = user.Role.Name
                 };
 
                 return Ok(userGet);

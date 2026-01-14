@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace EuroRunAPI.Modul.Models
 {
+    [Table("UserAccounts")]
     public class UserAccount
     {
         [Key]

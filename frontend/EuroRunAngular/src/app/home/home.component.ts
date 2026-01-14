@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Event} from '../model/Event.model'
+import { Event } from '../model/Event.model'
 import { HttpHeaders } from '@angular/common/http';
 
 @Component({
@@ -10,9 +10,9 @@ import { HttpHeaders } from '@angular/common/http';
   styleUrl: './home.component.css'
 })
 
-export class HomeComponent implements OnInit{
+export class HomeComponent implements OnInit {
 
-  eventlist: Event[] | null=null;
+  eventlist: Event[] | null = null;
   city: string = '';
   citytemp: string = '';
 
@@ -21,18 +21,21 @@ export class HomeComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    
-  } 
+    const nav = history.state;
+    if (nav?.message) {
+      alert(nav.message);
+    }
+  }
 
-  GetEvents(city:string) {
+  GetEvents(city: string) {
     const headers = new HttpHeaders({
       'Accept': 'text/plain'
     });
-  
-    this.http.get<Event[]>("https://localhost:7249/Event/SearchEvents/search?city="+city, { headers })
-    .subscribe(response => {
-      this.eventlist = response
-      this.citytemp=city
-    });
+
+    this.http.get<Event[]>("https://localhost:7249/Event/SearchEvents/search?city=" + city, { headers })
+      .subscribe(response => {
+        this.eventlist = response
+        this.citytemp = city
+      });
   }
 }

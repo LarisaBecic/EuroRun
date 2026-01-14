@@ -4,12 +4,13 @@ using EuroRunAPI.Authentification.ViewModels;
 using EuroRunAPI.Data;
 using EuroRunAPI.Helpers;
 using EuroRunAPI.Modul.Models;
+using EuroRunAPI.Modul.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using static EuroRunAPI.Authentification.Helpers.MyAuthTokenExtension;
-using Microsoft.EntityFrameworkCore;
 
 namespace EuroRunAPI.Authentification.Controllers
 {
@@ -30,7 +31,7 @@ namespace EuroRunAPI.Authentification.Controllers
         [HttpPost]
         public ActionResult<LoginInfo> Login([FromBody] LoginVM login)
         {
-            UserAccount loggedInAccount = _dbContext.UserAccounts
+            UserAccount loggedInAccount = _dbContext.UserAccounts.Include("Role")
             .FirstOrDefault(u => u.UserName != null && u.UserName == login.UserName);
 
             if (loggedInAccount == null ||
@@ -57,7 +58,27 @@ namespace EuroRunAPI.Authentification.Controllers
             _dbContext.Add(newToken);
             _dbContext.SaveChanges();
 
-            return new LoginInfo(newToken);
+            var userGet = new UserAccountGetVM
+            {
+                FirstName = loggedInAccount.FirstName,
+                LastName = loggedInAccount.LastName,
+                PhoneNumber = loggedInAccount.PhoneNumber,
+                Email = loggedInAccount.Email,
+                UserName = loggedInAccount.UserName,
+                Picture = loggedInAccount.Picture != null ? Convert.ToBase64String(loggedInAccount.Picture) : null,
+                Active = loggedInAccount.Active,
+                Role = loggedInAccount.Role.Name
+            };
+
+            var tokenGet = new AuthentificationTokenGetVM()
+            {
+                IpAddress = newToken.IpAddress,
+                Value = newToken.Value,
+                UserAccount = userGet,
+                TimeOfLogin = newToken.TimeOfLogin
+            };
+
+            return new LoginInfo(tokenGet);
 
         }
 
@@ -77,9 +98,9 @@ namespace EuroRunAPI.Authentification.Controllers
         }
 
         [HttpGet]
-        public ActionResult<AuthentificationToken> Get()
+        public ActionResult<AuthentificationTokenGetVM> Get()
         {
-            AuthentificationToken AuthentificationToken = HttpContext.GetAuthToken();
+            AuthentificationTokenGetVM AuthentificationToken = HttpContext.GetAuthTokenVM();
 
             return AuthentificationToken;
         }

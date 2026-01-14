@@ -1,14 +1,24 @@
 <nav class="navbar navbar-light bg-light px-4 py-3">
   <div class="container-fluid d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center">
-      <a class="navbar-brand" href="#">
-        <img id="logo" src="{{Logo}}" alt="EuroRun Logo">
-      </a>
+
+    <a class="navbar-brand" routerLink="/">
+      <img id="logo" [src]="Logo" alt="EuroRun Logo">
+    </a>
+
+    <!-- NOT LOGGED IN -->
+    <div class="d-flex" *ngIf="!loginInfo?.isLoggedIn && router.url !== '/auth'">
+      <p class="nav-link"
+         routerLink="/auth">
+        Sign in
+      </p>
     </div>
-    <div class="d-flex">
-      <p class="nav-link">Sign up</p>
-      <p class="nav-link">Log in</p>
+
+    <!-- LOGGED IN -->
+    <div *ngIf="loginInfo?.isLoggedIn">
+      <p (click)="logOut()" class="nav-link">Log out</p>
     </div>
+
   </div>
 </nav>
-<router-outlet />
+
+<router-outlet></router-outlet>

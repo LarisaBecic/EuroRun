@@ -8,18 +8,22 @@ import { MarkdownModule } from 'ngx-markdown';
 import { RouterModule } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
+import { AuthComponent } from './auth/auth.component';
 
 @NgModule({
   declarations: [
         AppComponent,
         HomeComponent,
+        AuthComponent
     ],
     bootstrap: [AppComponent],
     imports: [
       BrowserModule,
+      FormsModule,
       MarkdownModule.forRoot(),
       RouterModule.forRoot([
             { path: '', component: HomeComponent },
+            { path: 'auth', component: AuthComponent },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]),
       FormsModule,
