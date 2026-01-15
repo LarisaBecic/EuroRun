@@ -1,0 +1,140 @@
+<div class="admin-container">
+
+  <h2>Locations</h2>
+
+  <div class="form-row">
+    <input placeholder="Location name" [(ngModel)]="newLocationName">
+    <input type="number" placeholder="Latitude" [(ngModel)]="newLocationLatitude">
+    <input type="number" placeholder="Longitude" [(ngModel)]="newLocationLongitude">
+
+    <select [(ngModel)]="newLocationCityId">
+      <option [ngValue]="null">Select city</option>
+      <option *ngFor="let c of cities" [ngValue]="c.id">
+        {{ c.name }} ({{ c.country.name }})
+      </option>
+    </select>
+
+    <button (click)="addLocation()">Add</button>
+  </div>
+
+  <table class="table-locations">
+    <tr>
+      <th>Name</th>
+      <th>Coordinates</th>
+      <th>City</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let l of locations">
+      <td *ngIf="editLocationId !== l.id">{{ l.name }}</td>
+      <td *ngIf="editLocationId === l.id">
+        <input [(ngModel)]="editLocationName">
+      </td>
+
+      <td *ngIf="editLocationId !== l.id">
+        {{ l.latitude }}, {{ l.longitude }}
+      </td>
+      <td *ngIf="editLocationId === l.id">
+        <input type="number" [(ngModel)]="editLocationLatitude">
+        <input type="number" [(ngModel)]="editLocationLongitude">
+      </td>
+
+      <td *ngIf="editLocationId !== l.id">
+        {{ l.city.name }} ({{ l.city.country.name }})
+      </td>
+      <td *ngIf="editLocationId === l.id">
+        <select [(ngModel)]="editLocationCityId">
+          <option *ngFor="let c of cities" [ngValue]="c.id">
+            {{ c.name }} ({{ c.country.name }})
+          </option>
+        </select>
+      </td>
+
+      <td>
+        <button *ngIf="editLocationId !== l.id" (click)="startEditLocation(l)">Edit</button>
+        <button *ngIf="editLocationId === l.id" (click)="updateLocation()">Save</button>
+        <button *ngIf="editLocationId === l.id" (click)="cancelEditLocation()">Cancel</button>
+        <button (click)="deleteLocation(l.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <h2>Cities</h2>
+
+  <div class="form-row">
+    <input placeholder="New city name" [(ngModel)]="newCityName">
+
+    <select [(ngModel)]="newCityCountryId">
+      <option [ngValue]="null">Select country</option>
+      <option *ngFor="let c of countries" [ngValue]="c.id">
+        {{ c.name }}
+      </option>
+    </select>
+
+    <button (click)="addCity()">Add</button>
+  </div>
+
+  <table class="table-cities">
+    <tr>
+      <th>Name</th>
+      <th>Country</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let city of cities">
+      <td *ngIf="editCityId !== city.id">{{ city.name }}</td>
+      <td *ngIf="editCityId === city.id">
+        <input [(ngModel)]="editCityName">
+      </td>
+
+      <td *ngIf="editCityId !== city.id">{{ city.country.name }}</td>
+      <td *ngIf="editCityId === city.id">
+        <select [(ngModel)]="editCityCountryId">
+          <option *ngFor="let c of countries" [ngValue]="c.id">
+            {{ c.name }}
+          </option>
+        </select>
+      </td>
+
+      <td>
+        <button *ngIf="editCityId !== city.id" (click)="startEditCity(city)">Edit</button>
+        <button *ngIf="editCityId === city.id" (click)="updateCity()">Save</button>
+        <button *ngIf="editCityId === city.id" (click)="cancelEditCity()">Cancel</button>
+        <button (click)="deleteCity(city.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+  <hr>
+
+  <h2>Countries</h2>
+
+  <div class="form-row">
+    <input placeholder="New country name" [(ngModel)]="newCountryName">
+    <button (click)="addCountry()">Add</button>
+  </div>
+
+  <table class="table-countries">
+    <tr>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+
+    <tr *ngFor="let c of countries">
+      <td *ngIf="editCountryId !== c.id">{{ c.name }}</td>
+      <td *ngIf="editCountryId === c.id">
+        <input [(ngModel)]="editCountryName">
+      </td>
+
+      <td>
+        <button *ngIf="editCountryId !== c.id" (click)="startEditCountry(c)">Edit</button>
+        <button *ngIf="editCountryId === c.id" (click)="updateCountry()">Save</button>
+        <button *ngIf="editCountryId === c.id" (click)="cancelEditCountry()">Cancel</button>
+        <button (click)="deleteCountry(c.id)">Delete</button>
+      </td>
+    </tr>
+  </table>
+
+</div>

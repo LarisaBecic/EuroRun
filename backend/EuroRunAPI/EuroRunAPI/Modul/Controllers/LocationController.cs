@@ -72,7 +72,7 @@ namespace EuroRunAPI.Modul.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Location>>> GetAll()
         {
-            var locations = await _context.Locations.Include("City").ToListAsync();
+            var locations = await _context.Locations.Include(l => l.City).ThenInclude(c => c.Country).ToListAsync();
 
             return Ok(locations);
         }

@@ -1,0 +1,88 @@
+.admin-container {
+  max-width: 900px;
+  margin: 30px auto;
+}
+
+h2 {
+  margin-top: 30px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+input, select {
+  padding: 6px;
+}
+
+button {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; /* IMPORTANT */
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  word-wrap: break-word;
+}
+
+th {
+  background: #f0f0f0;
+}
+
+hr {
+  margin: 40px 0;
+}
+
+.table-countries th:nth-child(1),
+.table-countries td:nth-child(1) {
+  width: 70%;
+}
+
+.table-countries th:nth-child(2),
+.table-countries td:nth-child(2) {
+  width: 30%;
+}
+
+.table-cities th:nth-child(1),
+.table-cities td:nth-child(1) {
+  width: 35%;
+}
+
+.table-cities th:nth-child(2),
+.table-cities td:nth-child(2) {
+  width: 35%;
+}
+
+.table-cities th:nth-child(3),
+.table-cities td:nth-child(3) {
+  width: 30%;
+}
+
+.table-locations th:nth-child(1),
+.table-locations td:nth-child(1) {
+  width: 25%;
+}
+
+.table-locations th:nth-child(2),
+.table-locations td:nth-child(2) {
+  width: 25%;
+}
+
+.table-locations th:nth-child(3),
+.table-locations td:nth-child(3) {
+  width: 30%;
+}
+
+.table-locations th:nth-child(4),
+.table-locations td:nth-child(4) {
+  width: 20%;
+}

@@ -9,12 +9,16 @@ import { RouterModule } from '@angular/router';
 import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
 import { AuthComponent } from './auth/auth.component';
+import { AdminCitiesCountriesComponent } from './admin_cities_countries/admin_cities_countries.component';
+import { AdminEventsComponent } from './admin_events/admin_events.component';
 
 @NgModule({
   declarations: [
         AppComponent,
         HomeComponent,
-        AuthComponent
+        AuthComponent,
+        AdminCitiesCountriesComponent,
+        AdminEventsComponent
     ],
     bootstrap: [AppComponent],
     imports: [
@@ -24,9 +28,10 @@ import { AuthComponent } from './auth/auth.component';
       RouterModule.forRoot([
             { path: '', component: HomeComponent },
             { path: 'auth', component: AuthComponent },
+            { path: 'admin-countries-cities', component: AdminCitiesCountriesComponent },
+            { path: 'admin-events', component: AdminEventsComponent },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]),
-      FormsModule,
     ],
   providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

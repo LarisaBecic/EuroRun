@@ -15,6 +15,12 @@
 
     <!-- LOGGED IN -->
     <div *ngIf="loginInfo?.isLoggedIn">
+      <p routerLink="/admin-countries-cities" class="nav-link">Manage Cities</p>
+    </div>
+    <div *ngIf="loginInfo?.isLoggedIn">
+      <p routerLink="/admin-events" class="nav-link">Manage Events</p>
+    </div>
+    <div *ngIf="loginInfo?.isLoggedIn">
       <p (click)="logOut()" class="nav-link">Log out</p>
     </div>
 
