@@ -13,17 +13,14 @@ import { Location, LocationAddUpdate } from '../model/Location.model';
 })
 export class AdminCitiesCountriesComponent implements OnInit {
 
-  // ---------------- LISTS ----------------
   countries: Country[] = [];
   cities: City[] = [];
   locations: Location[] = [];
 
-  // ---------------- COUNTRY FORM ----------------
   newCountryName = '';
   editCountryId: number | null = null;
   editCountryName = '';
 
-  // ---------------- CITY FORM ----------------
   newCityName = '';
   newCityCountryId: number | null = null;
 
@@ -31,7 +28,6 @@ export class AdminCitiesCountriesComponent implements OnInit {
   editCityName = '';
   editCityCountryId: number | null = null;
 
-  // ---------------- LOCATION FORM ----------------
   newLocationName = '';
   newLocationLatitude: number | null = null;
   newLocationLongitude: number | null = null;
@@ -50,8 +46,6 @@ export class AdminCitiesCountriesComponent implements OnInit {
     this.getCities();
     this.getLocations();
   }
-
-  // ================= COUNTRIES =================
 
   getCountries() {
     this.httpClient.get<Country[]>(Config.api + '/Country/GetAll')
@@ -108,8 +102,6 @@ export class AdminCitiesCountriesComponent implements OnInit {
     this.editCountryId = null;
     this.editCountryName = '';
   }
-
-  // ================= CITIES =================
 
   getCities() {
     this.httpClient.get<City[]>(Config.api + '/City/GetAll')
@@ -179,8 +171,6 @@ export class AdminCitiesCountriesComponent implements OnInit {
     this.editCityName = '';
     this.editCityCountryId = null;
   }
-
-  // ================= LOCATIONS =================
 
   getLocations() {
     this.httpClient.get<Location[]>(Config.api + '/Location/GetAll')

@@ -1,7 +1,6 @@
 <div class="auth-container">
     <div class="auth-card">
 
-        <!-- Tabs header -->
         <div class="tabs">
             <h3>
                 <a href="#" class="active" (click)="switchTab('loginTab', $event)">
@@ -15,10 +14,8 @@
             </h3>
         </div>
 
-        <!-- Tabs content -->
         <div class="tabs-content">
 
-            <!-- LOGIN -->
             <div id="loginTab" class="active">
                 <h2>Welcome back</h2>
 
@@ -29,7 +26,6 @@
                 <button (click)="logIn()">Log in</button>
             </div>
 
-            <!-- REGISTER -->
             <div id="registerTab">
                 <h2>Create account</h2>
 
@@ -37,6 +33,16 @@
                 <input type="text" placeholder="Last name" [(ngModel)]="txtLastName">
                 <input type="text" placeholder="Phone number" [(ngModel)]="txtPhoneNumber">
                 <input type="email" placeholder="Email" [(ngModel)]="txtEmail">
+                <label>Date of birth</label>
+                <input type="date" [(ngModel)]="dateOfBirth"
+                    (ngModelChange)="onDateTimeChange('dateOfBirth', $event)" />
+                <label>Gender</label>
+                <select [(ngModel)]="gender_id">
+                    <option value="0" disabled>Select gender</option>
+                    <option *ngFor="let g of genders" [value]="g.id">
+                        {{ g.name }}
+                    </option>
+                </select>
                 <input type="text" placeholder="Username" [(ngModel)]="txtUsernameRegister">
                 <input type="password" placeholder="Password" [(ngModel)]="txtPasswordRegister">
 

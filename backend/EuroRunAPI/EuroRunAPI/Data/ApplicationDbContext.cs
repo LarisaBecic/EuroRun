@@ -45,7 +45,7 @@ namespace EuroRunAPI.Data
 
         public DbSet<AuthentificationToken> AuthentificationTokens { get; set; }
 
-
+        public DbSet<Gender> Genders { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
@@ -55,9 +55,9 @@ namespace EuroRunAPI.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<EventRegistration>()
-                .HasOne(e => e.User)
+                .HasOne(e => e.UserAccount)
                 .WithMany()
-                .HasForeignKey(e => e.User_id)
+                .HasForeignKey(e => e.UserAccount_id)
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<EventRegistration>()

@@ -1,3 +1,6 @@
+import { Gender } from "../model/Gender.model";
+import { Role } from "../model/Role.model";
+
 export class LoginInfo {
   authentificationToken?: AuthentificationToken|null=null;
   isLoggedIn: boolean=false;
@@ -11,6 +14,7 @@ export interface AuthentificationToken {
 }
 
 export interface UserAccount {
+  id: number;
   firstName: string;
   lastName: string;
   phoneNumber: string;
@@ -18,5 +22,7 @@ export interface UserAccount {
   userName: string;
   picture?: string;
   active: boolean;
-  role: string;
+  role?: Role;
+  dateOfBirth: string;
+  gender?: Gender;
 }

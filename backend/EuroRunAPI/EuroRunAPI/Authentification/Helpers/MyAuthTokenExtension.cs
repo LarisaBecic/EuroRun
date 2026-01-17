@@ -54,7 +54,7 @@ namespace EuroRunAPI.Authentification.Helpers
                 UserName = authToken.UserAccount.UserName,
                 Picture = authToken.UserAccount.Picture != null ? Convert.ToBase64String(authToken.UserAccount.Picture) : null,
                 Active = authToken.UserAccount.Active,
-                Role = authToken.UserAccount.Role.Name
+                Role = authToken.UserAccount.Role
             };
 
             var tokenGet = new AuthentificationTokenGetVM()

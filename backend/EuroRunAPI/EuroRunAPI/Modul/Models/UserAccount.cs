@@ -17,6 +17,11 @@ namespace EuroRunAPI.Modul.Models
         public string UserName { get; set; }
         public byte[]? Picture { get; set; }
         public bool Active { get; set; }
+        public DateTime DateOfBirth { get; set; }
+
+        [ForeignKey(nameof(Gender))]
+        public int Gender_id { get; set; }
+        public Gender Gender { get; set; }
 
         [ForeignKey(nameof(Role))]
         public int Role_id { get; set; }

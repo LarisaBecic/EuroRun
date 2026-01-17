@@ -5,6 +5,7 @@ import { LoginInfo } from '../helpers/login-info';
 import { Config } from '../config';
 import { AuthentificationHelper } from '../helpers/authentification-helper';
 import { AuthService } from '../helpers/auth.service';
+import { Gender } from '../model/Gender.model';
 
 @Component({
     selector: 'app-auth',
@@ -12,6 +13,8 @@ import { AuthService } from '../helpers/auth.service';
     styleUrl: './auth.component.css',
 })
 export class AuthComponent implements OnInit {
+
+    genders: Gender[] = [];
 
     txtUserName: any;
     txtPassword: any;
@@ -21,6 +24,8 @@ export class AuthComponent implements OnInit {
     txtLastName: any;
     txtPasswordRegister: any;
     txtPhoneNumber: any;
+    dateOfBirth: any;
+    gender_id: any;
     active: boolean = true;
     role: number = 1;
 
@@ -28,6 +33,7 @@ export class AuthComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.getGenders();
     }
 
     logIn() {
@@ -76,6 +82,8 @@ export class AuthComponent implements OnInit {
             picture: null,
             password: this.txtPasswordRegister,
             active: this.active,
+            dateOfBirth: this.dateOfBirth,
+            gender_id: this.gender_id,
             role_id: this.role
         };
 
@@ -96,22 +104,25 @@ export class AuthComponent implements OnInit {
         }
     }
 
+    getGenders() {
+        this.httpClient
+            .get<Gender[]>(Config.api + '/Gender/GetAll', Config.http_options())
+            .subscribe(res => this.genders = res);
+    }
+
     switchTab(tabId: string, event: Event): void {
         event.preventDefault();
 
-        // Remove 'active' class from all tabs
         const tabs = document.querySelectorAll('.tabs-content > div');
         tabs.forEach(tab => {
             tab.classList.remove('active');
         });
 
-        // Add 'active' class to the selected tab
         const selectedTab = document.getElementById(tabId);
         if (selectedTab) {
             selectedTab.classList.add('active');
         }
 
-        // Update the active class on the tab links
         const tabLinks = document.querySelectorAll('.tabs h3 a');
         tabLinks.forEach(link => {
             link.classList.remove('active');
@@ -119,6 +130,13 @@ export class AuthComponent implements OnInit {
 
         const clickedLink = event.target as HTMLElement;
         clickedLink.classList.add('active');
+    }
+
+    onDateTimeChange(field: 'dateOfBirth', value: string) {
+        if (!value) return;
+
+        const iso = new Date(value).toISOString();
+        this.dateOfBirth[field] = iso;
     }
 
 }

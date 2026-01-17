@@ -24,6 +24,22 @@ namespace EuroRunAPI.Modul.Controllers
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] UserAccountAddVM UserAccountAdd)
         {
+            var usernameNew = UserAccountAdd.UserName.Trim().ToLower(); 
+
+            bool exists = await _context.UserAccounts
+                .AnyAsync(u => u.UserName.Trim().ToLower() == usernameNew);
+
+            if (exists)
+                return Conflict("This username is already taken!");
+
+            var emailNew = UserAccountAdd.Email.Trim().ToLower();
+
+            bool existsMail = await _context.UserAccounts
+                .AnyAsync(u => u.Email.Trim().ToLower() == emailNew);
+
+            if (existsMail)
+                return Conflict("This email is already taken!");
+
             var NewUserAccount = new UserAccount
             {
                 FirstName = UserAccountAdd.FirstName,
@@ -33,6 +49,8 @@ namespace EuroRunAPI.Modul.Controllers
                 UserName = UserAccountAdd.UserName,
                 Picture = UserAccountAdd.Picture != null ? Convert.FromBase64String(UserAccountAdd.Picture) : null,
                 Active = UserAccountAdd.Active,
+                DateOfBirth = UserAccountAdd.DateOfBirth,
+                Gender_id = UserAccountAdd.Gender_id,
                 Role_id = UserAccountAdd.Role_id,
             };
 
@@ -55,11 +73,12 @@ namespace EuroRunAPI.Modul.Controllers
         [HttpGet("id")]
         public async Task<ActionResult> GetById(int id)
         {
-            var user = await _context.UserAccounts.Include("Role").FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _context.UserAccounts.Include("Role").Include("Gender").FirstOrDefaultAsync(u => u.Id == id);
 
             if (user != null)
             {
                 var userGet = new UserAccountGetVM {
+                    Id = user.Id,
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
@@ -67,7 +86,9 @@ namespace EuroRunAPI.Modul.Controllers
                     UserName = user.UserName,
                     Picture = user.Picture != null ? Convert.ToBase64String(user.Picture) : null,
                     Active = user.Active,
-                    Role = user.Role.Name
+                    DateOfBirth = user.DateOfBirth,
+                    Gender = user.Gender,
+                    Role = user.Role
                 };
 
                 return Ok(userGet);
@@ -92,7 +113,9 @@ namespace EuroRunAPI.Modul.Controllers
                 user.UserName = UserAccountUpdate.UserName;
                 user.Picture = UserAccountUpdate.Picture != null ? Convert.FromBase64String(UserAccountUpdate.Picture) : null;
                 user.Active = UserAccountUpdate.Active;
-                user.Role_id = UserAccountUpdate.Role_id;
+                user.DateOfBirth = UserAccountUpdate.DateOfBirth;
+                user.Gender_id = UserAccountUpdate.Gender_id;
+                
                 await _context.SaveChangesAsync();
                 return Ok();
             }

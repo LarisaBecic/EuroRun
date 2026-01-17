@@ -7,6 +7,7 @@ namespace EuroRunAPI.Modul.ViewModels
 {
     public class UserAccountGetVM
     {
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string PhoneNumber { get; set; }
@@ -14,6 +15,8 @@ namespace EuroRunAPI.Modul.ViewModels
         public string UserName { get; set; }
         public string? Picture { get; set; }
         public bool Active { get; set; }
-        public string Role { get; set; }
+        public Role Role { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public Gender Gender { get; set; }
     }
 }

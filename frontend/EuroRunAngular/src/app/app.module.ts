@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthComponent } from './auth/auth.component';
 import { AdminCitiesCountriesComponent } from './admin_cities_countries/admin_cities_countries.component';
 import { AdminEventsComponent } from './admin_events/admin_events.component';
+import { EventComponent } from './event/event.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AdminEventsComponent } from './admin_events/admin_events.component';
         HomeComponent,
         AuthComponent,
         AdminCitiesCountriesComponent,
-        AdminEventsComponent
+        AdminEventsComponent,
+        EventComponent
     ],
     bootstrap: [AppComponent],
     imports: [
@@ -30,6 +32,7 @@ import { AdminEventsComponent } from './admin_events/admin_events.component';
             { path: 'auth', component: AuthComponent },
             { path: 'admin-countries-cities', component: AdminCitiesCountriesComponent },
             { path: 'admin-events', component: AdminEventsComponent },
+            { path: 'event/:id', component: EventComponent },
             { path: '**', redirectTo: '', pathMatch: 'full' }
         ]),
     ],

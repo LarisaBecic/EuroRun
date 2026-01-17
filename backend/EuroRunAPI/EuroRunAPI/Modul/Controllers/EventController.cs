@@ -77,9 +77,11 @@ namespace EuroRunAPI.Modul.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult> GetById(int id)
+        public async Task<ActionResult<Event>> GetById(int id)
         {
-            return Ok(await _context.Events.FirstOrDefaultAsync(g => g.Id == id));
+            return Ok(await _context.Events.Include(e => e.EventType)
+                .Include(e => e.Location).ThenInclude(l => l.City).ThenInclude(c => c.Country)
+                .FirstOrDefaultAsync(g => g.Id == id));
         }
 
         [HttpGet]

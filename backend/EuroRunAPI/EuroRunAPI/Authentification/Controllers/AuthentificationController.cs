@@ -31,7 +31,7 @@ namespace EuroRunAPI.Authentification.Controllers
         [HttpPost]
         public ActionResult<LoginInfo> Login([FromBody] LoginVM login)
         {
-            UserAccount loggedInAccount = _dbContext.UserAccounts.Include("Role")
+            UserAccount loggedInAccount = _dbContext.UserAccounts.Include("Role").Include(ua=>ua.Gender)
             .FirstOrDefault(u => u.UserName != null && u.UserName == login.UserName);
 
             if (loggedInAccount == null ||
@@ -60,6 +60,7 @@ namespace EuroRunAPI.Authentification.Controllers
 
             var userGet = new UserAccountGetVM
             {
+                Id = loggedInAccount.Id,
                 FirstName = loggedInAccount.FirstName,
                 LastName = loggedInAccount.LastName,
                 PhoneNumber = loggedInAccount.PhoneNumber,
@@ -67,7 +68,9 @@ namespace EuroRunAPI.Authentification.Controllers
                 UserName = loggedInAccount.UserName,
                 Picture = loggedInAccount.Picture != null ? Convert.ToBase64String(loggedInAccount.Picture) : null,
                 Active = loggedInAccount.Active,
-                Role = loggedInAccount.Role.Name
+                DateOfBirth = loggedInAccount.DateOfBirth,
+                Gender = loggedInAccount.Gender,
+                Role = loggedInAccount.Role
             };
 
             var tokenGet = new AuthentificationTokenGetVM()

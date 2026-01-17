@@ -1,16 +1,11 @@
 <div class="container mt-4">
   <h2>Search events by city</h2>
-  
+
   <div class="form-group">
     <label for="cityInput">Enter city:</label>
-    <input 
-      type="text" 
-      id="cityInput" 
-      class="form-control" 
-      [(ngModel)]="city" 
-      placeholder="Enter city name">
+    <input type="text" id="cityInput" class="form-control" [(ngModel)]="city" placeholder="Enter city name">
   </div>
-  
+
   <button class="btn btn-primary mt-3" (click)="GetEvents(city)">Search events</button>
 
   <div *ngIf="eventlist && eventlist.length > 0" class="mt-4">
@@ -24,15 +19,18 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let event of eventlist">
+        <tr *ngFor="let event of eventlist" class="clickable-row" [routerLink]="['/event', event.id]">
+
           <td>{{ event.name }}</td>
           <td>{{ event.location.name }}</td>
           <td>{{ event.eventType.name }}</td>
+
         </tr>
       </tbody>
     </table>
+
   </div>
-  
+
   <div *ngIf="!eventlist || eventlist.length === 0" class="mt-4">
     <p>No events available for the selected city.</p>
   </div>

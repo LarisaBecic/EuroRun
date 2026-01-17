@@ -17,7 +17,6 @@ export class AdminEventsComponent implements OnInit {
   locations: Location[] = [];
   eventTypes: EventType[] = [];
 
-  // form state
   selectedEvent: Event | null = null;
   isFormOpen = false;
   isEditMode = false;
@@ -36,7 +35,7 @@ export class AdminEventsComponent implements OnInit {
   ngOnInit(): void {
     this.getEvents();
     this.getLocations();
-    this.getEventTypes(); // ✅ NEW
+    this.getEventTypes();
   }
 
   getLocations() {
@@ -127,7 +126,6 @@ export class AdminEventsComponent implements OnInit {
 onDateTimeChange(field: 'dateTime' | 'registrationDeadline', value: string) {
   if (!value) return;
 
-  // Convert local datetime to ISO for backend
   const iso = new Date(value).toISOString();
   this.eventForm[field] = iso;
 }

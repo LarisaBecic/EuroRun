@@ -93,6 +93,24 @@ namespace EuroRunAPI.TestDataModul.Controllers
             await _dbContext.Locations.AddAsync(location3);
             await _dbContext.SaveChangesAsync();
 
+            var female = new Gender
+            {
+                Name = "Female",
+
+            };
+
+            await _dbContext.Genders.AddAsync(female);
+            await _dbContext.SaveChangesAsync();
+
+            var male = new Gender
+            {
+                Name = "Male",
+
+            };
+
+            await _dbContext.Genders.AddAsync(male);
+            await _dbContext.SaveChangesAsync();
+
             var role1 = new Role
             {
                 Name = "User",
@@ -115,17 +133,38 @@ namespace EuroRunAPI.TestDataModul.Controllers
             {
                 FirstName = "Larisa",
                 LastName = "Becic",
-                PhoneNumber = "061123456",
+                PhoneNumber = "061336554",
                 Email = "larisa.becic@edu.fit.ba",
-                UserName = "larisa.becic",
+                UserName = "lara",
                 Active = true,
-                Role_id = role1.Id
+                DateOfBirth = new DateTime(2000, 2, 23),
+                Gender_id = female.Id,
+                Role_id = role2.Id
             };
 
             string useraccount1password = _passwordHasher.HashPassword(useraccount1, "123456");
             useraccount1.Password = useraccount1password;
 
             await _dbContext.UserAccounts.AddAsync(useraccount1);
+            await _dbContext.SaveChangesAsync();
+
+            var useraccount2 = new UserAccount
+            {
+                FirstName = "Esref",
+                LastName = "Pivcic",
+                PhoneNumber = "063111254",
+                Email = "esref.pivcic@edu.fit.ba",
+                UserName = "eshi",
+                Active = true,
+                DateOfBirth = new DateTime(2001, 3, 21),
+                Gender_id = male.Id,
+                Role_id = role1.Id
+            };
+
+            string useraccount2password = _passwordHasher.HashPassword(useraccount2, "123456");
+            useraccount2.Password = useraccount2password;
+
+            await _dbContext.UserAccounts.AddAsync(useraccount2);
             await _dbContext.SaveChangesAsync();
 
             var eventtype1 = new EventType
@@ -161,9 +200,9 @@ namespace EuroRunAPI.TestDataModul.Controllers
             var event1 = new Event
             {
                 Name = "Mostar Half marathon",
-                DateTime = new DateTime(2025, 3, 22, 8, 0, 0),
+                DateTime = new DateTime(2027, 3, 21, 8, 0, 0),
                 Description = "",
-                RegistrationDeadline = new DateTime(2025,3,20,0,0,0),
+                RegistrationDeadline = new DateTime(2027, 3,20,0,0,0),
                 EventType_id=eventtype2.Id,
                 Location_id=location1.Id,
 
@@ -175,9 +214,9 @@ namespace EuroRunAPI.TestDataModul.Controllers
             var event2 = new Event
             {
                 Name = "Mostar Challenge",
-                DateTime = new DateTime(2025, 5, 10, 8, 0, 0),
+                DateTime = new DateTime(2027, 5, 10, 8, 0, 0),
                 Description = "",
-                RegistrationDeadline = new DateTime(2025, 5, 8, 0, 0, 0),
+                RegistrationDeadline = new DateTime(2027, 5, 8, 0, 0, 0),
                 EventType_id = eventtype3.Id,
                 Location_id = location2.Id,
 
@@ -189,9 +228,9 @@ namespace EuroRunAPI.TestDataModul.Controllers
             var event3 = new Event
             {
                 Name = "Sarajevo Half marathon",
-                DateTime = new DateTime(2025, 9, 21, 8, 30, 0),
+                DateTime = new DateTime(2027, 9, 21, 8, 30, 0),
                 Description = "",
-                RegistrationDeadline = new DateTime(2025, 9, 19, 0, 0, 0),
+                RegistrationDeadline = new DateTime(2027, 9, 19, 0, 0, 0),
                 EventType_id = eventtype2.Id,
                 Location_id = location3.Id,
 
@@ -232,6 +271,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
             data.Add("Cities", _dbContext.Cities.Count());
             data.Add("Locations", _dbContext.Locations.Count());
             data.Add("Roles", _dbContext.Roles.Count());
+            data.Add("Genders", _dbContext.Genders.Count());
             data.Add("UserAccounts", _dbContext.UserAccounts.Count());
             data.Add("EventTypes", _dbContext.EventTypes.Count());
             data.Add("Events", _dbContext.Events.Count());

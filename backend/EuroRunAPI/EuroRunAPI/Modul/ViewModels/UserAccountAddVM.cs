@@ -10,6 +10,8 @@
         public string? Picture { get; set; }
         public string Password { get; set; }
         public bool Active { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public int Gender_id { get; set; }
         public int Role_id { get; set; }
     }
 }

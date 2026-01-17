@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { LoginInfo } from './login-info';
+import { LoginInfo, UserAccount } from './login-info';
 import { AuthentificationHelper } from './authentification-helper';
 
 @Injectable({ providedIn: 'root' })
@@ -16,6 +16,15 @@ export class AuthService {
     AuthentificationHelper.setLoginInfo(info);
     this.loginInfoSubject.next(info);
   }
+
+  updateUserAccount(updatedUser: UserAccount) {
+  const info = this.loginInfoSubject.value;
+  if (!info?.authentificationToken) return;
+
+  info.authentificationToken.userAccount = updatedUser;
+  this.loginInfoSubject.next({ ...info });
+}
+
 
   getLoginInfo(): LoginInfo | null {
     return this.loginInfoSubject.value;

@@ -1,24 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using EuroRunAPI.Modul.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EuroRunAPI.Modul.Models
+namespace EuroRunAPI.Modul.ViewModels
 {
-    [Table("EventRegistrations")]
-    public class EventRegistration
+    public class EventRegistrationGetVM
     {
-        [Key]
         public int Id { get; set; }
-
         public DateTime RegistrationDate { get; set; }
-
-        [ForeignKey(nameof(UserAccount))]
-        public int UserAccount_id { get; set; }
         public UserAccount UserAccount { get; set; }
-
-        [ForeignKey(nameof(Event))]
-        public int Event_id { get; set; }
         public Event Event { get; set; }
-
         public string? Club { get; set; }
         public string? ShirtSize { get; set; }
         public int? NumberOfFinishedRaces { get; set; }
