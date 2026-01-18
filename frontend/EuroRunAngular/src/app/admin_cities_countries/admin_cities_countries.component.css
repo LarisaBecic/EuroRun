@@ -1,88 +1,97 @@
-.admin-container {
-  max-width: 900px;
-  margin: 30px auto;
+.admin-page {
+  background: #f5f7fa;
+  padding: 32px 0;
+}
+
+.admin-card {
+  max-width: 1000px;
+  margin: 0 auto 32px;
+  background: white;
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
 }
 
 h2 {
-  margin-top: 30px;
+  margin: 0 0 20px;
+  font-weight: 600;
 }
 
+/* Forms */
 .form-row {
   display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-input, select {
-  padding: 6px;
-}
-
-button {
-  padding: 6px 10px;
-  cursor: pointer;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  table-layout: fixed; /* IMPORTANT */
-}
-
-th, td {
+input,
+select {
+  padding: 10px 14px;
+  border-radius: 10px;
   border: 1px solid #ccc;
-  padding: 8px;
-  word-wrap: break-word;
+  font-size: 14px;
 }
 
-th {
-  background: #f0f0f0;
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #1976d2;
 }
 
-hr {
-  margin: 40px 0;
+/* Buttons */
+button {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
-.table-countries th:nth-child(1),
-.table-countries td:nth-child(1) {
-  width: 70%;
+.btn-primary {
+  background: #1976d2;
+  color: white;
 }
 
-.table-countries th:nth-child(2),
-.table-countries td:nth-child(2) {
-  width: 30%;
+.btn-text {
+  background: #1976d2c0;
+  color: white;
 }
 
-.table-cities th:nth-child(1),
-.table-cities td:nth-child(1) {
-  width: 35%;
+.btn-danger {
+  background: #e53935;
+  color: white;
 }
 
-.table-cities th:nth-child(2),
-.table-cities td:nth-child(2) {
-  width: 35%;
+button:hover {
+  opacity: 0.9;
 }
 
-.table-cities th:nth-child(3),
-.table-cities td:nth-child(3) {
-  width: 30%;
+/* Tables */
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
 }
 
-.table-locations th:nth-child(1),
-.table-locations td:nth-child(1) {
-  width: 25%;
+.table thead th {
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: #666;
 }
 
-.table-locations th:nth-child(2),
-.table-locations td:nth-child(2) {
-  width: 25%;
+.table tbody tr {
+  background: #f9fafb;
+  border-radius: 10px;
 }
 
-.table-locations th:nth-child(3),
-.table-locations td:nth-child(3) {
-  width: 30%;
+.table tbody td {
+  padding: 12px;
+  vertical-align: middle;
 }
 
-.table-locations th:nth-child(4),
-.table-locations td:nth-child(4) {
-  width: 20%;
+.actions {
+  display: flex;
+  gap: 8px;
 }

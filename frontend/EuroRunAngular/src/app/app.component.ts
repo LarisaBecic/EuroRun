@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpHeaders } from '@angular/common/http';
 import { Config } from './config';
-import { AuthentificationHelper } from './helpers/authentification-helper';
-import { LoginInfo } from './helpers/login-info';import { AuthService } from './helpers/auth.service';
+import { LoginInfo } from './helpers/login-info'; import { AuthService } from './helpers/auth.service';
 ;
 
 @Component({
@@ -17,7 +16,10 @@ export class AppComponent {
   Logo: string | null = null;
   loginInfo: LoginInfo | null = null;
 
-  constructor(private httpClient: HttpClient, public router: Router, private authService: AuthService) {}
+  searchCity = '';
+  menuOpen = false;
+
+  constructor(private httpClient: HttpClient, public router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
     this.authService.loginInfo$.subscribe(info => {
@@ -39,11 +41,29 @@ export class AppComponent {
   }
 
   logOut() {
-    let token = Config.http_options();
+    const confirmed = window.confirm('Are you sure you want to log out?');
+
+    if (!confirmed) {
+      return; 
+    }
+
+    const token = Config.http_options();
+
     this.authService.setLoginInfo(null);
-    this.httpClient.post(Config.api + "/Authentification/LogOut/", null, token)
-      .subscribe((x: any) => {
-      });
+
+    this.httpClient
+      .post(Config.api + '/Authentification/LogOut/', null, token)
+      .subscribe();
+
+    this.menuOpen = false;
     this.router.navigate(['']);
+  }
+
+
+  search() {
+    if (!this.searchCity.trim()) return;
+    this.router.navigate(['/results'], {
+      queryParams: { city: this.searchCity }
+    });
   }
 }

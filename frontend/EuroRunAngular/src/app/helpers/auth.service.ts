@@ -18,12 +18,21 @@ export class AuthService {
   }
 
   updateUserAccount(updatedUser: UserAccount) {
-  const info = this.loginInfoSubject.value;
-  if (!info?.authentificationToken) return;
+    const info = this.loginInfoSubject.value;
+    if (!info?.authentificationToken) return;
 
-  info.authentificationToken.userAccount = updatedUser;
-  this.loginInfoSubject.next({ ...info });
-}
+    const updatedInfo: LoginInfo = {
+      ...info,
+      authentificationToken: {
+        ...info.authentificationToken,
+        userAccount: updatedUser
+      }
+    };
+    this.loginInfoSubject.next(updatedInfo);
+
+    AuthentificationHelper.setLoginInfo(updatedInfo);
+  }
+
 
 
   getLoginInfo(): LoginInfo | null {

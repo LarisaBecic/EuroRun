@@ -1,0 +1,67 @@
+<div class="registered-events">
+  <div class="header">
+    <h2>Events</h2>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Event Date</th>
+          <th>Registration Date</th>
+          <th>Location</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let re of registeredEvents" (click)="openDetails(re)">
+          <td>{{ re.event.name }}</td>
+          <td>{{ re.event.dateTime | date:'short' }}</td>
+          <td>{{ re.registrationDate | date:'short' }}</td>
+          <td>{{ re.event.location.name }}</td>
+          <td>{{ re.event.eventType.name }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="overlay" *ngIf="isDetailsOpen && selectedRegistration">
+    <div class="details-card">
+
+      <h3>Event Registration Details</h3>
+
+      <section>
+        <h4>Event</h4>
+        <p><strong>Name:</strong> {{ selectedRegistration.event.name }}</p>
+        <p><strong>Date:</strong> {{ selectedRegistration.event.dateTime | date:'full' }}</p>
+        <p><strong>Type:</strong> {{ selectedRegistration.event.eventType.name }}</p>
+        <p><strong>Description:</strong> {{ selectedRegistration.event.description }}</p>
+      </section>
+
+      <section>
+        <h4>Location</h4>
+        <p><strong>Name:</strong> {{ selectedRegistration.event.location.name }}</p>
+        <p><strong>City:</strong> {{ selectedRegistration.event.location.city.name }}, {{ selectedRegistration.event.location.city.country.name }}</p>
+        <p><strong>Coordinates:</strong> {{ selectedRegistration.event.location.latitude }}, {{ selectedRegistration.event.location.longitude }}</p>
+      </section>
+
+      <section>
+        <h4>Your Registration</h4>
+        <p><strong>Registration Date:</strong> {{ selectedRegistration.registrationDate | date:'full' }}</p>
+        <p><strong>Club:</strong> {{ selectedRegistration.club || '—' }}</p>
+        <p><strong>Shirt Size:</strong> {{ selectedRegistration.shirtSize || '—' }}</p>
+        <p><strong>Finished Races:</strong> {{ selectedRegistration.numberOfFinishedRaces }}</p>
+        <p><strong>Discovery Source:</strong> {{ selectedRegistration.eventDiscoverySource || '—' }}</p>
+        <p><strong>Note:</strong> {{ selectedRegistration.note || '—' }}</p>
+      </section>
+
+      <div class="actions">
+        <button class="btn-primary" (click)="updateComingSoon()">Update</button>
+        <button class="btn-secondary" (click)="closeDetails()">Close</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

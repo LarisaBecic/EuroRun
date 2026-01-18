@@ -29,6 +29,26 @@ export class AuthComponent implements OnInit {
     active: boolean = true;
     role: number = 1;
 
+    passwordStrength = 0;
+    passwordStrengthLabel = 'Weak';
+
+    loginErrors = {
+        userName: '',
+        password: ''
+    };
+
+    registerErrors = {
+        firstName: '',
+        lastName: '',
+        phoneNumber: '',
+        email: '',
+        dateOfBirth: '',
+        gender: '',
+        userName: '',
+        password: ''
+    };
+
+
     constructor(private httpClient: HttpClient, private router: Router, private authService: AuthService) {
     }
 
@@ -37,6 +57,8 @@ export class AuthComponent implements OnInit {
     }
 
     logIn() {
+        if (!this.validateLogin()) return;
+
         let credentials: any = {
             userName: this.txtUserName,
             password: this.txtPassword
@@ -48,9 +70,7 @@ export class AuthComponent implements OnInit {
                     next: (x: LoginInfo) => {
                         if (x.isLoggedIn) {
                             this.authService.setLoginInfo(x);
-                            this.router.navigate([''], {
-                                state: { message: 'Welcome back!' }
-                            });
+                            this.router.navigate(['']);
                         } else {
                             AuthentificationHelper.setLoginInfo(null);
                             alert("Incorrect login!");
@@ -73,6 +93,8 @@ export class AuthComponent implements OnInit {
     }
 
     register() {
+        if (!this.validateRegister()) return;
+
         let registerInfo = {
             firstName: this.txtFirstName,
             lastName: this.txtLastName,
@@ -138,5 +160,95 @@ export class AuthComponent implements OnInit {
         const iso = new Date(value).toISOString();
         this.dateOfBirth[field] = iso;
     }
+
+    checkPasswordStrength(password: string) {
+        let strength = 0;
+
+        if (!password) {
+            this.passwordStrength = 0;
+            this.passwordStrengthLabel = 'Weak';
+            return;
+        }
+
+        if (password.length >= 8) strength++;
+        if (/[A-Z]/.test(password)) strength++;
+        if (/[0-9]/.test(password)) strength++;
+        if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+        this.passwordStrength = strength;
+
+        switch (strength) {
+            case 4:
+                this.passwordStrengthLabel = 'Strong';
+                break;
+            case 3:
+                this.passwordStrengthLabel = 'Good';
+                break;
+            case 2:
+                this.passwordStrengthLabel = 'Fair';
+                break;
+            default:
+                this.passwordStrengthLabel = 'Weak';
+        }
+    }
+
+    validateLogin(): boolean {
+        this.loginErrors = { userName: '', password: '' };
+
+        if (!this.txtUserName?.trim()) {
+            this.loginErrors.userName = 'Username is required';
+        }
+
+        if (!this.txtPassword?.trim()) {
+            this.loginErrors.password = 'Password is required';
+        }
+
+        return !this.loginErrors.userName && !this.loginErrors.password;
+    }
+
+    validateRegister(): boolean {
+        this.registerErrors = {
+            firstName: '',
+            lastName: '',
+            phoneNumber: '',
+            email: '',
+            dateOfBirth: '',
+            gender: '',
+            userName: '',
+            password: ''
+        };
+
+        if (!this.txtFirstName?.trim())
+            this.registerErrors.firstName = 'First name is required';
+
+        if (!this.txtLastName?.trim())
+            this.registerErrors.lastName = 'Last name is required';
+
+        if (!this.txtPhoneNumber?.trim())
+            this.registerErrors.phoneNumber = 'Phone number is required';
+
+        if (!this.txtEmail?.trim())
+            this.registerErrors.email = 'Email is required';
+        else if (!/^\S+@\S+\.\S+$/.test(this.txtEmail))
+            this.registerErrors.email = 'Invalid email format';
+
+        if (!this.dateOfBirth)
+            this.registerErrors.dateOfBirth = 'Date of birth is required';
+
+        if (!this.gender_id || this.gender_id === 0)
+            this.registerErrors.gender = 'Gender is required';
+
+        if (!this.txtUsernameRegister?.trim())
+            this.registerErrors.userName = 'Username is required';
+
+        if (!this.txtPasswordRegister)
+            this.registerErrors.password = 'Password is required';
+        else if (this.passwordStrength < 3)
+            this.registerErrors.password = 'Password is too weak';
+
+        return Object.values(this.registerErrors).every(e => !e);
+    }
+
+
 
 }

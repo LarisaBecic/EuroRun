@@ -1,54 +1,83 @@
 <div class="auth-container">
-    <div class="auth-card">
+  <div class="auth-card">
 
-        <div class="tabs">
-            <h3>
-                <a href="#" class="active" (click)="switchTab('loginTab', $event)">
-                    Login
-                </a>
-            </h3>
-            <h3>
-                <a href="#" (click)="switchTab('registerTab', $event)">
-                    Register
-                </a>
-            </h3>
-        </div>
-
-        <div class="tabs-content">
-
-            <div id="loginTab" class="active">
-                <h2>Welcome back</h2>
-
-                <input type="text" placeholder="Username" [(ngModel)]="txtUserName">
-
-                <input type="password" placeholder="Password" [(ngModel)]="txtPassword">
-
-                <button (click)="logIn()">Log in</button>
-            </div>
-
-            <div id="registerTab">
-                <h2>Create account</h2>
-
-                <input type="text" placeholder="First name" [(ngModel)]="txtFirstName">
-                <input type="text" placeholder="Last name" [(ngModel)]="txtLastName">
-                <input type="text" placeholder="Phone number" [(ngModel)]="txtPhoneNumber">
-                <input type="email" placeholder="Email" [(ngModel)]="txtEmail">
-                <label>Date of birth</label>
-                <input type="date" [(ngModel)]="dateOfBirth"
-                    (ngModelChange)="onDateTimeChange('dateOfBirth', $event)" />
-                <label>Gender</label>
-                <select [(ngModel)]="gender_id">
-                    <option value="0" disabled>Select gender</option>
-                    <option *ngFor="let g of genders" [value]="g.id">
-                        {{ g.name }}
-                    </option>
-                </select>
-                <input type="text" placeholder="Username" [(ngModel)]="txtUsernameRegister">
-                <input type="password" placeholder="Password" [(ngModel)]="txtPasswordRegister">
-
-                <button (click)="register()">Register</button>
-            </div>
-
-        </div>
+    <div class="tabs">
+      <h3>
+        <a href="#" class="active" (click)="switchTab('loginTab', $event)">
+          Login
+        </a>
+      </h3>
+      <h3>
+        <a href="#" (click)="switchTab('registerTab', $event)">
+          Register
+        </a>
+      </h3>
     </div>
+
+    <div class="tabs-content">
+
+      <div id="loginTab" class="active">
+        <h2 class="auth-title">Welcome Back</h2>
+
+        <input type="text" placeholder="Username" [(ngModel)]="txtUserName">
+        <small class="error" *ngIf="loginErrors.userName">{{ loginErrors.userName }}</small>
+
+        <input type="password" placeholder="Password" [(ngModel)]="txtPassword">
+        <small class="error" *ngIf="loginErrors.password">{{ loginErrors.password }}</small>
+
+        <button class="btn-primary" (click)="logIn()">Log In</button>
+      </div>
+
+      <div id="registerTab">
+        <h2 class="auth-title">Create Account</h2>
+
+        <input type="text" placeholder="First Name" [(ngModel)]="txtFirstName">
+        <small class="error" *ngIf="registerErrors.firstName">{{ registerErrors.firstName }}</small>
+
+        <input type="text" placeholder="Last Name" [(ngModel)]="txtLastName">
+        <small class="error" *ngIf="registerErrors.lastName">{{ registerErrors.lastName }}</small>
+
+        <input type="text" placeholder="Phone Number" [(ngModel)]="txtPhoneNumber">
+        <small class="error" *ngIf="registerErrors.phoneNumber">{{ registerErrors.phoneNumber }}</small>
+
+        <input type="email" placeholder="Email" [(ngModel)]="txtEmail">
+        <small class="error" *ngIf="registerErrors.email">{{ registerErrors.email }}</small>
+
+        <label>Date of Birth</label>
+        <input type="date"
+               [(ngModel)]="dateOfBirth"
+               (ngModelChange)="onDateTimeChange('dateOfBirth', $event)" />
+        <small class="error" *ngIf="registerErrors.dateOfBirth">{{ registerErrors.dateOfBirth }}</small>
+
+        <label>Gender</label>
+        <select [(ngModel)]="gender_id">
+          <option value="0" disabled>Select gender</option>
+          <option *ngFor="let g of genders" [value]="g.id">{{ g.name }}</option>
+        </select>
+        <small class="error" *ngIf="registerErrors.gender">{{ registerErrors.gender }}</small>
+
+        <input type="text" placeholder="Username" [(ngModel)]="txtUsernameRegister">
+        <small class="error" *ngIf="registerErrors.userName">{{ registerErrors.userName }}</small>
+
+        <input type="password"
+               placeholder="Password"
+               [(ngModel)]="txtPasswordRegister"
+               (input)="checkPasswordStrength(txtPasswordRegister)">
+        <small class="error" *ngIf="registerErrors.password">{{ registerErrors.password }}</small>
+
+        <div class="password-meter">
+          <div class="bar">
+            <span [class.active]="passwordStrength >= 1"></span>
+            <span [class.active]="passwordStrength >= 2"></span>
+            <span [class.active]="passwordStrength >= 3"></span>
+            <span [class.active]="passwordStrength >= 4"></span>
+          </div>
+          <small class="label">{{ passwordStrengthLabel }}</small>
+        </div>
+
+        <button class="btn-primary" (click)="register()">Register</button>
+
+      </div>
+    </div>
+  </div>
 </div>

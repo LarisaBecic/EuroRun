@@ -11,6 +11,7 @@ export interface Event {
   eventType: EventType;
   location_id: number;
   location: Location;
+  picture?: string;
 }
 
 export interface EventAddUpdate {
@@ -20,4 +21,5 @@ export interface EventAddUpdate {
   dateTime: string;
   description: string;
   registrationDeadline: string;
+  picture?: string;
 }

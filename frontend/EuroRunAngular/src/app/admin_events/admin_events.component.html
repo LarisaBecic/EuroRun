@@ -1,80 +1,98 @@
-<div class="admin-events">
+<div class="admin-page">
 
-    <div class="header">
-        <h2>Events</h2>
-        <button (click)="openAddForm()">+ Add Event</button>
+  <div class="admin-card">
+
+    <div class="card-header">
+      <h2>Events</h2>
+      <button class="btn-primary" (click)="openAddForm()">Add Event</button>
     </div>
 
-    <!-- LIST VIEW -->
-    <table class="events-table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Type</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let e of events" (click)="openEditForm(e)">
-                <td>{{ e.name }}</td>
-                <td>{{ e.dateTime | date:'short' }}</td>
-                <td>{{ e.location.name }}</td>
-                <td>{{ e.eventType.name }}</td>
-                <td>
-                    <button class="delete" (click)="deleteEvent(e.id); $event.stopPropagation()">
-                        ✕
-                    </button>
-                </td>
-            </tr>
-        </tbody>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Type</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let e of events" (click)="openEditForm(e)">
+          <td>{{ e.name }}</td>
+          <td>{{ e.dateTime | date:'short' }}</td>
+          <td>{{ e.location.name }}</td>
+          <td>{{ e.eventType.name }}</td>
+          <td class="actions">
+            <button
+              class="btn-danger"
+              (click)="deleteEvent(e.id); $event.stopPropagation()"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
-    <!-- FORM -->
-    <div class="form-overlay" *ngIf="isFormOpen">
-        <div class="form-card">
+  </div>
 
-            <h3>{{ isEditMode ? 'Edit Event' : 'Add Event' }}</h3>
-
-            <label>Name</label>
-            <input [(ngModel)]="eventForm.name" />
-
-            <label>Event Type</label>
-            <select [(ngModel)]="eventForm.eventType_id">
-                <option value="0" disabled>Select event type</option>
-                <option *ngFor="let t of eventTypes" [value]="t.id">
-                    {{ t.name }}
-                </option>
-            </select>
-
-
-            <label>Location</label>
-            <select [(ngModel)]="eventForm.location_id">
-                <option value="0" disabled>Select location</option>
-                <option *ngFor="let l of locations" [value]="l.id">
-                    {{ l.name }} – {{ l.city.name }}
-                </option>
-            </select>
-
-            <label>Date & Time</label>
-            <input type="datetime-local" [(ngModel)]="eventForm.dateTime"
-                (ngModelChange)="onDateTimeChange('dateTime', $event)" />
-
-            <label>Registration Deadline</label>
-            <input type="datetime-local" [(ngModel)]="eventForm.registrationDeadline"
-                (ngModelChange)="onDateTimeChange('registrationDeadline', $event)" />
-            <label>Description</label>
-            <textarea [(ngModel)]="eventForm.description"></textarea>
-
-            <div class="actions">
-                <button (click)="isEditMode ? updateEvent() : addEvent()">
-                    {{ isEditMode ? 'Update' : 'Create' }}
-                </button>
-                <button class="cancel" (click)="closeForm()">Cancel</button>
-            </div>
-
+  <!-- MODAL -->
+  <div class="modal-backdrop" *ngIf="isFormOpen">
+    <div class="modal-card">
+     <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <h3>{{ isEditMode ? 'Edit Event' : 'Add Event' }}</h3>
         </div>
-    </div>
+        <button class="btn-icon" (click)="closeForm()">✕</button>
+      </div>
+        <label>Name</label>
+        <input [(ngModel)]="eventForm.name" />
 
+        <label>Event Type</label>
+        <select [(ngModel)]="eventForm.eventType_id">
+          <option value="0" disabled>Select event type</option>
+          <option *ngFor="let t of eventTypes" [value]="t.id">
+            {{ t.name }}
+          </option>
+        </select>
+
+        <label>Location</label>
+        <select [(ngModel)]="eventForm.location_id">
+          <option value="0" disabled>Select location</option>
+          <option *ngFor="let l of locations" [value]="l.id">
+            {{ l.name }} – {{ l.city.name }}
+          </option>
+        </select>
+        <label>Date & Time</label>
+        <input type="datetime-local"
+          [(ngModel)]="eventForm.dateTime"
+          (ngModelChange)="onDateTimeChange('dateTime', $event)" />
+
+        <label>Registration Deadline</label>
+        <input type="datetime-local"
+          [(ngModel)]="eventForm.registrationDeadline"
+          (ngModelChange)="onDateTimeChange('registrationDeadline', $event)" />
+        <label>Description</label>
+        <textarea [(ngModel)]="eventForm.description"></textarea>
+
+        <label>Event Picture</label>
+        <input type="file" accept="image/*" (change)="onImageSelected($event)" />
+
+        <div class="image-preview" *ngIf="imagePreview">
+          <img [src]="imagePreview" />
+        </div>
+
+      <!-- ACTIONS -->
+      <div class="modal-actions">      
+        <button class="btn-primary"
+          (click)="isEditMode ? updateEvent() : addEvent()">
+          {{ isEditMode ? 'Update Event' : 'Create Event' }}
+        </button>
+      </div>
+      </div>
+    </div>
+  </div>
 </div>

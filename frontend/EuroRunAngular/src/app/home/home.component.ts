@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Event } from '../model/Event.model'
+import { Event as AppEvent} from '../model/Event.model'
 import { HttpHeaders } from '@angular/common/http';
+import { Config } from '../config';
 
 @Component({
   selector: 'app-home',
@@ -16,8 +17,9 @@ export class HomeComponent implements OnInit {
   city: string = '';
   citytemp: string = '';
 
+  events: AppEvent[] = [];
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private httpClient: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -25,17 +27,12 @@ export class HomeComponent implements OnInit {
     if (nav?.message) {
       alert(nav.message);
     }
+    this.getTopFiveEvents();
   }
 
-  GetEvents(city: string) {
-    const headers = new HttpHeaders({
-      'Accept': 'text/plain'
-    });
-
-    this.http.get<Event[]>("https://localhost:7249/Event/SearchEvents/search?city=" + city, { headers })
-      .subscribe(response => {
-        this.eventlist = response
-        this.citytemp = city
-      });
+  getTopFiveEvents() {
+    this.httpClient
+      .get<AppEvent[]>(Config.api + '/Event/GetFiveEvents', Config.http_options())
+      .subscribe(res => this.events = res);
   }
 }

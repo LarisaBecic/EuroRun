@@ -1,0 +1,130 @@
+.registered-events {
+  padding: 30px;
+  font-family: 'Roboto', sans-serif;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.header h2 {
+  font-size: 28px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: #fff;
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.events-table th,
+.events-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.events-table th {
+  background: #fafafa;
+  font-weight: 500;
+  color: #555;
+}
+
+.events-table tr {
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.events-table tr:hover {
+  background: rgba(25,118,210,0.05);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.details-card {
+  background: #fff;
+  padding: 28px;
+  width: 100%;
+  max-width: 650px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+}
+
+.details-card h3 {
+  margin-top: 0;
+  font-size: 22px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #333;
+}
+
+.details-card section {
+  margin-bottom: 20px;
+}
+
+.details-card h4 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #1976d2;
+}
+
+.details-card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+button.btn-primary {
+  background: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 22px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button.btn-primary:hover {
+  background: #115293;
+}
+
+button.btn-secondary {
+  background: #eee;
+  color: #333;
+  border: none;
+  border-radius: 25px;
+  padding: 10px 22px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button.btn-secondary:hover {
+  background: #ddd;
+}

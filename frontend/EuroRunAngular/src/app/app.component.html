@@ -1,29 +1,50 @@
-<nav class="navbar navbar-light bg-light px-4 py-3">
-  <div class="container-fluid d-flex justify-content-between align-items-center">
+<nav class="navbar">
+  <div class="nav-left">
+    <button class="menu-btn" (click)="menuOpen = !menuOpen">
+      ☰
+    </button>
 
     <a class="navbar-brand" routerLink="/">
       <img id="logo" [src]="Logo" alt="EuroRun Logo">
     </a>
 
-    <!-- NOT LOGGED IN -->
-    <div class="d-flex" *ngIf="!loginInfo?.isLoggedIn && router.url !== '/auth'">
-      <p class="nav-link"
-         routerLink="/auth">
-        Sign in
+    <div class="menu" *ngIf="menuOpen">
+      <p routerLink="/" (click)="menuOpen = false">
+        Home
+      </p>
+
+      <p *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name === 'Administrator'"
+        routerLink="/admin-countries-cities" (click)="menuOpen = false">
+        Manage Cities
+      </p>
+
+      <p *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name === 'Administrator'"
+        routerLink="/admin-events" (click)="menuOpen = false">
+        Manage Events
+      </p>
+
+      <p *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name === 'User'"
+        routerLink="/registered-events" (click)="menuOpen = false">
+        My Events
       </p>
     </div>
+  </div>
 
-    <!-- LOGGED IN -->
-    <div *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name == 'Administrator'">
-      <p routerLink="/admin-countries-cities" class="nav-link">Manage Cities</p>
+  <div class="nav-center">
+    <div class="search">
+      <input type="text" placeholder="Search events by city..." [(ngModel)]="searchCity" (keyup.enter)="search()" />
+      <button (click)="search()">Search</button>
     </div>
-    <div *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name == 'Administrator'">
-      <p routerLink="/admin-events" class="nav-link">Manage Events</p>
-    </div>
-    <div *ngIf="loginInfo?.isLoggedIn">
-      <p (click)="logOut()" class="nav-link">Log out</p>
-    </div>
+  </div>
 
+  <div class="nav-right">
+    <p *ngIf="!loginInfo?.isLoggedIn && router.url !== '/auth'" routerLink="/auth" class="nav-link">
+      Sign in
+    </p>
+
+    <p *ngIf="loginInfo?.isLoggedIn" (click)="logOut()" class="nav-link">
+      Log out
+    </p>
   </div>
 </nav>
 

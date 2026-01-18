@@ -1,83 +1,176 @@
-.admin-events {
-  padding: 20px;
+/* PAGE */
+.admin-page {
+  background: #f5f7fa;
+  padding: 32px 0;
 }
 
-.header {
+input,
+select,
+textarea {
+  box-sizing: border-box;
+}
+
+/* CARD */
+.admin-card {
+  max-width: 1100px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+/* HEADER */
+.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-button {
-  padding: 6px 12px;
-  cursor: pointer;
-}
-
-.events-table {
+/* TABLE */
+.table {
   width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin-top: 16px;
 }
 
-.events-table th,
-.events-table td {
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+.table thead th {
+  font-size: 13px;
+  color: #666;
+  padding: 8px 12px;
 }
 
-.events-table tr {
+.table tbody tr {
+  background: #f9fafb;
   cursor: pointer;
 }
 
-.events-table tr:hover {
-  background: #f5f5f5;
+.table tbody td {
+  padding: 12px;
 }
 
-button.delete {
-  background: transparent;
+/* BUTTONS */
+button {
   border: none;
-  color: red;
-  font-size: 16px;
+  border-radius: 20px;
+  padding: 10px 18px;
+  cursor: pointer;
+  font-weight: 500;
 }
 
-.form-overlay {
+.btn-primary {
+  background: #1976d2;
+  color: white;
+}
+
+.btn-text {
+  background: transparent;
+  color: #1976d2;
+}
+
+.btn-danger {
+  background: #e53935;
+  color: white;
+}
+
+.btn-icon {
+  background: transparent;
+  font-size: 16px;
+  padding: 6px 10px;
+}
+
+/* MODAL */
+.modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0,0,0,0.45);
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  z-index: 200;
 }
 
-.form-card {
-  background: white;
-  padding: 20px;
-  width: 420px;
+.modal-card {
+    background: white;
+  border-radius: 16px;
+  padding: 0; /* remove padding here to avoid conflict */
   max-height: 90vh;
-  overflow-y: auto;
-  border-radius: 6px;
+  overflow: hidden; /* clip scrollbar outside the border */
+  width: 650px;
+  max-width: calc(100vw - 32px);
+  display: flex;
+  flex-direction: column;
 }
 
-.form-card label {
-  display: block;
-  margin-top: 10px;
-  font-weight: bold;
+.modal-content {
+  padding: 20px 24px; /* internal spacing */
+  overflow-y: auto;    /* scrolling happens here */
+  border-radius: inherit; /* inherit border-radius if you want rounded inside as well */
 }
 
-.form-card input,
-.form-card textarea,
-.form-card select {
-  width: 100%;
-  padding: 6px;
-  margin-top: 4px;
-}
-
-.actions {
+.modal-header {
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  align-items: start;
 }
 
-button.cancel {
-  background: #ccc;
+.step-indicator {
+  font-size: 12px;
+  color: #888;
+}
+
+/* FORM */
+label {
+  display: block;
+  margin-top: 16px;
+  font-weight: 500;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 10px 14px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #1976d2;
+}
+
+/* MODAL ACTIONS */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+/* IMAGE */
+.image-preview {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+}
+
+.btn-danger {
+  background: #e53935;
+  color: white;
 }

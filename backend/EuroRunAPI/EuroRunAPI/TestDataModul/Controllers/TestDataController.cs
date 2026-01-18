@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using EuroRunAPI.Helpers;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using FindMyRouteAPI.Helper;
 
 
 namespace EuroRunAPI.TestDataModul.Controllers
@@ -135,14 +136,14 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 LastName = "Becic",
                 PhoneNumber = "061336554",
                 Email = "larisa.becic@edu.fit.ba",
-                UserName = "lara",
+                UserName = "admin",
                 Active = true,
                 DateOfBirth = new DateTime(2000, 2, 23),
                 Gender_id = female.Id,
                 Role_id = role2.Id
             };
 
-            string useraccount1password = _passwordHasher.HashPassword(useraccount1, "123456");
+            string useraccount1password = _passwordHasher.HashPassword(useraccount1, "12345");
             useraccount1.Password = useraccount1password;
 
             await _dbContext.UserAccounts.AddAsync(useraccount1);
@@ -154,14 +155,14 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 LastName = "Pivcic",
                 PhoneNumber = "063111254",
                 Email = "esref.pivcic@edu.fit.ba",
-                UserName = "eshi",
+                UserName = "user",
                 Active = true,
                 DateOfBirth = new DateTime(2001, 3, 21),
                 Gender_id = male.Id,
                 Role_id = role1.Id
             };
 
-            string useraccount2password = _passwordHasher.HashPassword(useraccount2, "123456");
+            string useraccount2password = _passwordHasher.HashPassword(useraccount2, "12345");
             useraccount2.Password = useraccount2password;
 
             await _dbContext.UserAccounts.AddAsync(useraccount2);
@@ -197,15 +198,21 @@ namespace EuroRunAPI.TestDataModul.Controllers
             await _dbContext.EventTypes.AddAsync(eventtype3);
             await _dbContext.SaveChangesAsync();
 
+            byte[]? mostar = System.IO.File.ReadAllBytes("Images/Mostar.jpg");
+            byte[]? sarajevo = System.IO.File.ReadAllBytes("Images/Sarajevo.jpg");
+
+            mostar = Images.Resize(mostar, 550);
+            sarajevo = Images.Resize(sarajevo, 550);
+
             var event1 = new Event
             {
                 Name = "Mostar Half marathon",
                 DateTime = new DateTime(2027, 3, 21, 8, 0, 0),
-                Description = "",
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                 RegistrationDeadline = new DateTime(2027, 3,20,0,0,0),
                 EventType_id=eventtype2.Id,
                 Location_id=location1.Id,
-
+                Picture = mostar,
             };
 
             await _dbContext.Events.AddAsync(event1);
@@ -215,11 +222,11 @@ namespace EuroRunAPI.TestDataModul.Controllers
             {
                 Name = "Mostar Challenge",
                 DateTime = new DateTime(2027, 5, 10, 8, 0, 0),
-                Description = "",
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                 RegistrationDeadline = new DateTime(2027, 5, 8, 0, 0, 0),
                 EventType_id = eventtype3.Id,
                 Location_id = location2.Id,
-
+                Picture = mostar,
             };
 
             await _dbContext.Events.AddAsync(event2);
@@ -229,14 +236,56 @@ namespace EuroRunAPI.TestDataModul.Controllers
             {
                 Name = "Sarajevo Half marathon",
                 DateTime = new DateTime(2027, 9, 21, 8, 30, 0),
-                Description = "",
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                 RegistrationDeadline = new DateTime(2027, 9, 19, 0, 0, 0),
                 EventType_id = eventtype2.Id,
                 Location_id = location3.Id,
-
-            };
+                Picture = sarajevo,
+            }; 
 
             await _dbContext.Events.AddAsync(event3);
+            await _dbContext.SaveChangesAsync();
+
+            var event4 = new Event
+            {
+                Name = "Mostar Challenge 2",
+                DateTime = new DateTime(2027, 6, 10, 8, 0, 0),
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                RegistrationDeadline = new DateTime(2027, 5, 8, 0, 0, 0),
+                EventType_id = eventtype3.Id,
+                Location_id = location2.Id,
+                Picture = mostar,
+            };
+
+            await _dbContext.Events.AddAsync(event4);
+            await _dbContext.SaveChangesAsync();
+
+            var event5 = new Event
+            {
+                Name = "Sarajevo Half marathon 2",
+                DateTime = new DateTime(2027, 10, 21, 8, 30, 0),
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                RegistrationDeadline = new DateTime(2027, 9, 19, 0, 0, 0),
+                EventType_id = eventtype2.Id,
+                Location_id = location3.Id,
+                Picture = sarajevo,
+            };
+
+            await _dbContext.Events.AddAsync(event5);
+            await _dbContext.SaveChangesAsync();
+
+            var event6 = new Event
+            {
+                Name = "Sarajevo Half marathon 3",
+                DateTime = new DateTime(2027, 11, 21, 8, 30, 0),
+                Description = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                RegistrationDeadline = new DateTime(2027, 9, 19, 0, 0, 0),
+                EventType_id = eventtype2.Id,
+                Location_id = location3.Id,
+                Picture = sarajevo,
+            };
+
+            await _dbContext.Events.AddAsync(event6);
             await _dbContext.SaveChangesAsync();
 
             var award1 = new Award
@@ -266,9 +315,25 @@ namespace EuroRunAPI.TestDataModul.Controllers
             await _dbContext.Awards.AddAsync(award3);
             await _dbContext.SaveChangesAsync();
 
+            var registration = new EventRegistration
+            {
+                RegistrationDate = DateTime.Now,
+                UserAccount_id = useraccount2.Id,
+                Event_id = event1.Id,
+                Club = "HPD Prenj 1933",
+                ShirtSize = "L",
+                NumberOfFinishedRaces = 3,
+                EventDiscoverySource = "Instagram",
+                Note = "..."
+            };
+
+            await _dbContext.EventRegistrations.AddAsync(registration);
+            await _dbContext.SaveChangesAsync();
+
             Dictionary<string, int> data = new Dictionary<string, int>();
             data.Add("Countries", _dbContext.Countries.Count());
             data.Add("Cities", _dbContext.Cities.Count());
+            data.Add("EventRegistrations", _dbContext.EventRegistrations.Count());
             data.Add("Locations", _dbContext.Locations.Count());
             data.Add("Roles", _dbContext.Roles.Count());
             data.Add("Genders", _dbContext.Genders.Count());

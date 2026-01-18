@@ -1,37 +1,26 @@
-<div class="container mt-4">
-  <h2>Search events by city</h2>
-
-  <div class="form-group">
-    <label for="cityInput">Enter city:</label>
-    <input type="text" id="cityInput" class="form-control" [(ngModel)]="city" placeholder="Enter city name">
+<section class="hero">
+  <img src="hero.jpg" />
+  <div class="hero-content">
+    <h1>Where does running take you next?</h1>
   </div>
-
-  <button class="btn btn-primary mt-3" (click)="GetEvents(city)">Search events</button>
-
-  <div *ngIf="eventlist && eventlist.length > 0" class="mt-4">
-    <h3>Events in {{ citytemp }}</h3>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Location</th>
-          <th>Event Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let event of eventlist" class="clickable-row" [routerLink]="['/event', event.id]">
-
-          <td>{{ event.name }}</td>
-          <td>{{ event.location.name }}</td>
-          <td>{{ event.eventType.name }}</td>
-
-        </tr>
-      </tbody>
-    </table>
-
+</section>
+<section class="top-events">
+  <h2>Popular events</h2>
+  <div class="scroll">
+    <div class="event-card" *ngFor="let e of events" [routerLink]="['/event', e.id]">
+      <img *ngIf="e.picture" [src]="'data:image/jpeg;base64,' + e.picture" />
+      <h3>{{ e.name }}</h3>
+      <p>{{ e.location.name }}</p>
+    </div>
   </div>
-
-  <div *ngIf="!eventlist || eventlist.length === 0" class="mt-4">
-    <p>No events available for the selected city.</p>
+</section>
+<section class="hero">
+  <img src="berlin.jpg" />
+  <div class="hero-content">
+    <h2>Run across Europe</h2>
+    <p>
+      EuroRun lets you discover marathons, half-marathons and trail races across Europe.
+      Register for events, track your races and complete challenges across multiple countries.
+    </p>
   </div>
-</div>
+</section>

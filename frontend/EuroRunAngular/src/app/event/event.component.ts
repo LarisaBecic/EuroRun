@@ -47,14 +47,9 @@ export class EventComponent implements OnInit {
         this.authService.loginInfo$.subscribe(info => {
             this.loginInfo = info;
             if (info?.authentificationToken) {
-                const u = info.authentificationToken.userAccount;
-                this.firstName = u.firstName;
-                this.lastName = u.lastName;
-                this.email = u.email;
-                this.phoneNumber = u.phoneNumber;
-                this.dateOfBirth = u.dateOfBirth;
-                this.gender_id = u.gender?.id ?? null;
+                this.syncUserToForm(info.authentificationToken.userAccount);
             }
+
         });
 
         const eventId = Number(this.route.snapshot.paramMap.get('id'));
@@ -63,6 +58,15 @@ export class EventComponent implements OnInit {
         }
 
         this.getGenders();
+    }
+
+    private syncUserToForm(u: UserAccount) {
+        this.firstName = u.firstName ?? '';
+        this.lastName = u.lastName ?? '';
+        this.email = u.email ?? '';
+        this.phoneNumber = u.phoneNumber ?? '';
+        this.dateOfBirth = u.dateOfBirth ?? '';
+        this.gender_id = u.gender?.id ?? null;
     }
 
     getEventById(id: number) {
@@ -78,6 +82,10 @@ export class EventComponent implements OnInit {
     }
 
     openWizard() {
+        if (this.loginInfo?.authentificationToken) {
+            this.syncUserToForm(this.loginInfo.authentificationToken.userAccount);
+        }
+
         this.wizardStep = 1;
         this.showWizard = true;
     }
@@ -123,8 +131,8 @@ export class EventComponent implements OnInit {
                         gender: this.genders.find(g => g.id === payload.gender_id)
                     };
 
-
                     this.authService.updateUserAccount(updatedUser);
+                    this.syncUserToForm(updatedUser);
                 },
                 error: err => alert(err.error || 'Failed to update user')
             });

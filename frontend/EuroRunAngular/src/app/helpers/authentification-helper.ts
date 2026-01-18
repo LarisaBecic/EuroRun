@@ -1,12 +1,13 @@
 import {LoginInfo} from "./login-info";
 
 export class AuthentificationHelper {
-  static setLoginInfo(x: LoginInfo | null) :void
-  {
-    if(x==null)
-      x = new LoginInfo();
-    sessionStorage.setItem("authentification-token", JSON.stringify(x));
+  static setLoginInfo(x: LoginInfo | null): void {
+  if (x === null) {
+    sessionStorage.removeItem("authentification-token");
+    return;
   }
+  sessionStorage.setItem("authentification-token", JSON.stringify(x));
+}
 
   static getLoginInfo():LoginInfo
   {

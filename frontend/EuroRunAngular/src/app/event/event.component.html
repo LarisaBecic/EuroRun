@@ -1,75 +1,97 @@
 <div class="event-container" *ngIf="event">
-
-  <h1>{{ event.name }}</h1>
-  <p class="date">{{ event.dateTime | date:'fullDate' }}</p>
-
-  <p class="description">{{ event.description }}</p>
-
-  <div class="location">
-    📍 {{ event.location.name }},
-    {{ event.location.city.name }},
-    {{ event.location.city.country.name }}
+  <div class="event-header">
+    <h1>{{ event.name }}</h1>
+    <p class="date">{{ event.dateTime | date:'fullDate' }}</p>
   </div>
 
-  <button class="register-btn"
-          *ngIf="loginInfo?.isLoggedIn"
+  <div class="event-image" *ngIf="event.picture">
+    <img [src]="'data:image/jpeg;base64,' + event.picture" alt="Event Image">
+  </div>
+
+  <div class="event-info">
+    <p class="description">{{ event.description }}</p>
+    <div class="location">
+      📍 {{ event.location.name }} – {{ event.location.city.name }} – {{ event.location.city.country.name }}
+    </div>
+    <div class="event-type">
+      🏷️ {{ event.eventType.name }}
+    </div>
+  </div>
+
+  <button class="btn-primary register-btn"
+          *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name == 'User'"
           (click)="openWizard()">
-    Register for event
+    Register for Event
   </button>
 
   <div class="wizard-backdrop" *ngIf="showWizard">
-    <div class="wizard">
+    <div class="wizard-card">
 
-      <div *ngIf="wizardStep === 1">
-        <h2>Your details</h2>
-
-        <input [(ngModel)]="firstName" placeholder="First name">
-        <input [(ngModel)]="lastName" placeholder="Last name">
-        <input [(ngModel)]="email" placeholder="Email">
-        <input [(ngModel)]="phoneNumber" placeholder="Phone">
-        <input type="date" [(ngModel)]="dateOfBirth">
-
-        <select [(ngModel)]="gender_id">
-          <option *ngFor="let g of genders" [ngValue]="g.id">
-            {{ g.name }}
-          </option>
-        </select>
-
-        <div class="actions">
-          <button (click)="updateUser()">Update details</button>
-          <button (click)="wizardStep = 2">Next</button>
-        </div>
+      <div class="wizard-step">
+        Step {{ wizardStep }}/3
       </div>
 
-      <div *ngIf="wizardStep === 2">
-        <h2>Registration info</h2>
+      <div class="wizard-content">
 
-        <input [(ngModel)]="club" placeholder="Club">
-        <input [(ngModel)]="shirtSize" placeholder="Shirt size">
-        <input type="number" [(ngModel)]="numberOfFinishedRaces" placeholder="Finished races">
-        <input [(ngModel)]="eventDiscoverySource" placeholder="How did you hear about this event?">
-        <textarea [(ngModel)]="note" placeholder="Health notes / comments"></textarea>
+        <div *ngIf="wizardStep === 1">
+          <h2>Your Details</h2>
 
-        <div class="actions">
-          <button (click)="wizardStep = 1">Back</button>
-          <button (click)="wizardStep = 3">Next</button>
+          <input [(ngModel)]="firstName" placeholder="First Name">
+          <input [(ngModel)]="lastName" placeholder="Last Name">
+          <input [(ngModel)]="email" placeholder="Email">
+          <input [(ngModel)]="phoneNumber" placeholder="Phone">
+
+          <select [(ngModel)]="gender_id">
+            <option *ngFor="let g of genders" [ngValue]="g.id">
+              {{ g.name }}
+            </option>
+          </select>
+
+          <div class="wizard-actions">
+            <button class="btn-text" (click)="closeWizard()">Cancel</button>
+            <button class="btn-primary" (click)="updateUser()">Update Details</button>
+            <button class="btn-primary" (click)="wizardStep = 2">Next</button>
+          </div>
         </div>
-      </div>
 
-      <div *ngIf="wizardStep === 3">
-        <h2>Confirm registration</h2>
+        <div *ngIf="wizardStep === 2">
+          <h2>Registration Info</h2>
 
-        <p><b>Name:</b> {{ firstName }} {{ lastName }}</p>
-        <p><b>Event:</b> {{ event.name }}</p>
-        <p><b>Date:</b> {{ event.dateTime | date }}</p>
+          <input [(ngModel)]="club" placeholder="Club">
+          <input [(ngModel)]="shirtSize" placeholder="Shirt Size">
+          <input type="number" [(ngModel)]="numberOfFinishedRaces" placeholder="Finished Races">
+          <input [(ngModel)]="eventDiscoverySource" placeholder="How did you hear about this event?">
+          <textarea [(ngModel)]="note" placeholder="Health notes / comments"></textarea>
 
-        <div class="actions">
-          <button (click)="wizardStep = 2">Back</button>
-          <button class="confirm" (click)="addEventRegistration()">Confirm</button>
-          <button class="cancel" (click)="closeWizard()">Cancel</button>
+          <div class="wizard-actions">
+            <button class="btn-text" (click)="closeWizard()">Cancel</button>
+            <button class="btn-text" (click)="wizardStep = 1">Back</button>
+            <button class="btn-primary" (click)="wizardStep = 3">Next</button>
+          </div>
         </div>
-      </div>
 
+        <div *ngIf="wizardStep === 3">
+          <h2>Confirm Registration</h2>
+
+          <p><b>Name:</b> {{ firstName }} {{ lastName }}</p>
+          <p><b>Email:</b> {{ email }}</p>
+          <p><b>Event:</b> {{ event.name }}</p>
+          <p><b>Date:</b> {{ event.dateTime | date:'fullDate' }}</p>
+          <p><b>Location:</b> {{ event.location.name }} – {{ event.location.city.name }} – {{ event.location.city.country.name }}</p>
+          <p><b>Club:</b> {{ club }}</p>
+          <p><b>Shirt Size:</b> {{ shirtSize }}</p>
+          <p><b>Finished Races:</b> {{ numberOfFinishedRaces }}</p>
+          <p><b>Notes:</b> {{ note }}</p>
+
+          <div class="wizard-actions">
+            <button class="btn-text" (click)="closeWizard()">Cancel</button>
+            <button class="btn-text" (click)="wizardStep = 2">Back</button>
+            <button class="btn-primary" (click)="addEventRegistration()">Confirm</button>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
+
 </div>

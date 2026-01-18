@@ -63,7 +63,12 @@ namespace EuroRunAPI.Modul.Controllers
         [HttpGet("userAccountId")]
         public async Task<ActionResult<List<EventRegistrationGetVM>>> GetByUserId(int userAccountId)
         {
-            List<EventRegistration> eventRegistrations = await _context.EventRegistrations.Include(er => er.UserAccount).Include(er => er.Event).Where(er => er.UserAccount_id == userAccountId).ToListAsync();
+            List<EventRegistration> eventRegistrations = await _context.EventRegistrations
+                .Include(er => er.UserAccount)
+                .Include(er => er.Event).ThenInclude(e => e.Location).ThenInclude(l => l.City).ThenInclude(c => c.Country)
+                .Include(er => er.Event).ThenInclude(e => e.EventType)
+                .Where(er => er.UserAccount_id == userAccountId)
+                .ToListAsync();
 
             if (eventRegistrations != null)
             {

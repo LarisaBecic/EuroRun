@@ -1,0 +1,13 @@
+<div class="results">
+  <h2>Events in {{ city }}</h2>
+
+  <div class="cards">
+    <div class="card" *ngFor="let e of events" [routerLink]="['/event', e.id]">
+      <img *ngIf="e.picture" [src]="'data:image/jpeg;base64,' + e.picture" />
+      <div class="info">
+        <h3>{{ e.name }}</h3>
+        <p>{{ e.location.name }}</p>
+      </div>
+    </div>
+  </div>
+</div>
