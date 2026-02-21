@@ -25,7 +25,12 @@
 
       <p *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name === 'User'"
         routerLink="/registered-events" (click)="menuOpen = false">
-        My Events
+        My Registered Events
+      </p>
+
+      <p *ngIf="loginInfo?.isLoggedIn"
+        routerLink="/favourite-events" (click)="menuOpen = false">
+        My Favourite Events
       </p>
     </div>
   </div>

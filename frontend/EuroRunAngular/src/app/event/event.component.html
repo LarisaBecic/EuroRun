@@ -5,8 +5,16 @@
   </div>
 
   <div class="event-image" *ngIf="event.picture">
-    <img [src]="'data:image/jpeg;base64,' + event.picture" alt="Event Image">
+    <img [src]="'data:image/jpeg;base64,' + event.picture" alt="Event Image" (click)="openZoom(event.picture)"
+      class="clickable-image">
   </div>
+
+  <div class="zoom-overlay" *ngIf="zoomImage" (mousedown)="startPan($event)" (mousemove)="onPan($event)"
+    (mouseup)="stopPan()" (mouseleave)="stopPan()" (click)="closeZoom()" (wheel)="onWheel($event)">
+    <img class="zoomed-image" [src]="'data:image/jpeg;base64,' + zoomImage" (click)="$event.stopPropagation()"
+      [style.transform]="transformStyle">
+  </div>
+
 
   <div class="event-info">
     <p class="description">{{ event.description }}</p>
@@ -16,11 +24,19 @@
     <div class="event-type">
       🏷️ {{ event.eventType.name }}
     </div>
+    <div class="fav-div" (click)="$event.stopPropagation()">
+      <mat-icon class="heart-icon" (click)="toggleFavourite($event)">
+        {{ event.userFavourite ? 'favorite' : 'favorite_border' }}
+      </mat-icon>
+
+      <span class="fav-count">{{ event.favouritedTimes }}</span>
+    </div>
+
   </div>
 
   <button class="btn-primary register-btn"
-          *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name == 'User'"
-          (click)="openWizard()">
+    *ngIf="loginInfo?.isLoggedIn && loginInfo?.authentificationToken?.userAccount?.role?.name == 'User'"
+    (click)="openWizard()">
     Register for Event
   </button>
 
@@ -77,7 +93,8 @@
           <p><b>Email:</b> {{ email }}</p>
           <p><b>Event:</b> {{ event.name }}</p>
           <p><b>Date:</b> {{ event.dateTime | date:'fullDate' }}</p>
-          <p><b>Location:</b> {{ event.location.name }} – {{ event.location.city.name }} – {{ event.location.city.country.name }}</p>
+          <p><b>Location:</b> {{ event.location.name }} – {{ event.location.city.name }} – {{
+            event.location.city.country.name }}</p>
           <p><b>Club:</b> {{ club }}</p>
           <p><b>Shirt Size:</b> {{ shirtSize }}</p>
           <p><b>Finished Races:</b> {{ numberOfFinishedRaces }}</p>

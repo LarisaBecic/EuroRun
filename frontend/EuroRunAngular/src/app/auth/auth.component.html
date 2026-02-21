@@ -44,9 +44,7 @@
         <small class="error" *ngIf="registerErrors.email">{{ registerErrors.email }}</small>
 
         <label>Date of Birth</label>
-        <input type="date"
-               [(ngModel)]="dateOfBirth"
-               (ngModelChange)="onDateTimeChange('dateOfBirth', $event)" />
+        <input type="date" [(ngModel)]="dateOfBirth" (ngModelChange)="onDateTimeChange('dateOfBirth', $event)" />
         <small class="error" *ngIf="registerErrors.dateOfBirth">{{ registerErrors.dateOfBirth }}</small>
 
         <label>Gender</label>
@@ -59,10 +57,8 @@
         <input type="text" placeholder="Username" [(ngModel)]="txtUsernameRegister">
         <small class="error" *ngIf="registerErrors.userName">{{ registerErrors.userName }}</small>
 
-        <input type="password"
-               placeholder="Password"
-               [(ngModel)]="txtPasswordRegister"
-               (input)="checkPasswordStrength(txtPasswordRegister)">
+        <input type="password" placeholder="Password" [(ngModel)]="txtPasswordRegister"
+          (input)="checkPasswordStrength(txtPasswordRegister)">
         <small class="error" *ngIf="registerErrors.password">{{ registerErrors.password }}</small>
 
         <div class="password-meter">
@@ -74,6 +70,8 @@
           </div>
           <small class="label">{{ passwordStrengthLabel }}</small>
         </div>
+
+        <div id="recaptcha-container"></div>
 
         <button class="btn-primary" (click)="register()">Register</button>
 

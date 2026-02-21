@@ -13,5 +13,6 @@
         public DateTime DateOfBirth { get; set; }
         public int Gender_id { get; set; }
         public int Role_id { get; set; }
+        public string CaptchaToken { get; set; }
     }
 }

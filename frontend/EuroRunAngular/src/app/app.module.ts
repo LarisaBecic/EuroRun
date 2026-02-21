@@ -15,6 +15,9 @@ import { EventComponent } from './event/event.component';
 import { RegisteredEventsComponent } from './registered_events/registered_events.component';
 import { SearchResultsComponent } from './search_results/search_results.component';
 import { AuthGuard } from './guards/auth.guard';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { FavouriteEventsComponent } from './favourite_events/favourite_events.component';
 
 @NgModule({
   declarations: [
@@ -25,13 +28,16 @@ import { AuthGuard } from './guards/auth.guard';
     AdminEventsComponent,
     EventComponent,
     RegisteredEventsComponent,
-    SearchResultsComponent
+    SearchResultsComponent,
+    FavouriteEventsComponent
   ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     FormsModule,
     MarkdownModule.forRoot(),
+    MatButtonModule,
+    MatIconModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
       { path: 'auth', component: AuthComponent },
@@ -39,6 +45,7 @@ import { AuthGuard } from './guards/auth.guard';
       { path: 'admin-events', component: AdminEventsComponent, canActivate: [AuthGuard] },
       { path: 'event/:id', component: EventComponent },
       { path: 'registered-events', component: RegisteredEventsComponent, canActivate: [AuthGuard] },
+      { path: 'favourite-events', component: FavouriteEventsComponent, canActivate: [AuthGuard] },
       { path: 'results', component: SearchResultsComponent },
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]),

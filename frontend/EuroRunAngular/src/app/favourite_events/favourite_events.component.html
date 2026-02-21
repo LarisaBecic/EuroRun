@@ -1,0 +1,19 @@
+<div class="results">
+  <h2>My Favourite Events</h2>
+
+  <div class="cards">
+    <div class="card" *ngFor="let e of events" [routerLink]="['/event', e.id]">
+      <img *ngIf="e.picture" [src]="'data:image/jpeg;base64,' + e.picture" />
+      <div class="info">
+        <h3>{{ e.name }}</h3>
+        <p>{{ e.location.name }}</p>
+      </div>
+      <div class="fav-div">
+        <mat-icon class="heart-icon">
+          {{ e.userFavourite ? 'favorite' : 'favorite_border' }}
+        </mat-icon>
+        <span class="fav-count">{{ e.favouritedTimes }}</span>
+      </div>
+    </div>
+  </div>
+</div>

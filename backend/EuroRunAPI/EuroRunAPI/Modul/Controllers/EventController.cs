@@ -93,7 +93,7 @@ namespace EuroRunAPI.Modul.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<EventGetVM>> GetById(int id)
+        public async Task<ActionResult<EventGetVM>> GetById(int id, int? UserId)
         {
             Event? eventDb = await _context.Events.Include(e => e.EventType)
                 .Include(e => e.Location).ThenInclude(l => l.City).ThenInclude(c => c.Country)
@@ -112,7 +112,9 @@ namespace EuroRunAPI.Modul.Controllers
                     Location = eventDb.Location,
                     EventType = eventDb.EventType,
                     EventType_id = eventDb.EventType_id,
-                    Picture = eventDb.Picture != null ? Convert.ToBase64String(eventDb.Picture) : null
+                    Picture = eventDb.Picture != null ? Convert.ToBase64String(eventDb.Picture) : null,
+                    UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == eventDb.Id && f.User_Id == UserId),
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == eventDb.Id)
                 };
                 return Ok(eventGet);
             }
@@ -120,7 +122,7 @@ namespace EuroRunAPI.Modul.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<EventGetVM>>> GetAll()
+        public async Task<ActionResult<List<EventGetVM>>> GetAll(int? UserId)
         {
             var events = await _context.Events
                 .Include(e => e.EventType)
@@ -140,7 +142,9 @@ namespace EuroRunAPI.Modul.Controllers
                     Location = e.Location,
                     EventType = e.EventType,
                     EventType_id = e.EventType_id,
-                    Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null
+                    Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
+                    UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == e.Id && f.User_Id == UserId),
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
                 };
                 eventsGet.Add(eventGet);
             }
@@ -148,40 +152,40 @@ namespace EuroRunAPI.Modul.Controllers
             return Ok(eventsGet);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<EventGetVM>>> GetFiveEvents()
+        [HttpGet()]
+        public async Task<ActionResult<List<EventGetVM>>> GetTop10Events(int? UserId)
         {
             var events = await _context.Events
                 .Include(e => e.EventType)
-                .Include(e => e.Location).ThenInclude(l => l.City).ThenInclude(c => c.Country)
-                .Take(5)
+                .Include(e => e.Location)
+                    .ThenInclude(l => l.City)
+                        .ThenInclude(c => c.Country)
+                .OrderByDescending(e => _context.FavouriteEvents.Count(f => f.Event_Id == e.Id))
+                .Take(10)
                 .ToListAsync();
 
-            var eventsGet = new List<EventGetVM>();
-
-            foreach (var e in events)
+            var eventsGet = events.Select(e => new EventGetVM
             {
-                var eventGet = new EventGetVM
-                {
-                    Id = e.Id,
-                    Name = e.Name,
-                    DateTime = e.DateTime,
-                    Description = e.Description,
-                    RegistrationDeadline = e.RegistrationDeadline,
-                    Location_id = e.Location_id,
-                    Location = e.Location,
-                    EventType = e.EventType,
-                    EventType_id = e.EventType_id,
-                    Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null
-                };
-                eventsGet.Add(eventGet);
-            }
+                Id = e.Id,
+                Name = e.Name,
+                DateTime = e.DateTime,
+                Description = e.Description,
+                RegistrationDeadline = e.RegistrationDeadline,
+                Location_id = e.Location_id,
+                Location = e.Location,
+                EventType = e.EventType,
+                EventType_id = e.EventType_id,
+                Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
+                UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == e.Id && f.User_Id == UserId),
+                FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
+            }).ToList();
 
             return Ok(eventsGet);
         }
 
+
         [HttpGet("search")]
-        public async Task<ActionResult<List<EventGetVM>>> SearchEvents(string city)
+        public async Task<ActionResult<List<EventGetVM>>> SearchEvents(string city, int? UserId)
         {
             if (string.IsNullOrWhiteSpace(city))
             {
@@ -209,7 +213,44 @@ namespace EuroRunAPI.Modul.Controllers
                     Location = e.Location,
                     EventType = e.EventType,
                     EventType_id = e.EventType_id,
-                    Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null
+                    Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
+                    UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == e.Id && f.User_Id == UserId),
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
+                };
+                eventsGet.Add(eventGet);
+            }
+
+            return Ok(eventsGet);
+        }
+
+        [HttpGet()]
+        public async Task<ActionResult<List<EventGetVM>>> GetUserFavourites(int UserId)
+        {
+            var events = await _context.Events
+                .Include(e => e.EventType)
+                .Include(e => e.Location).ThenInclude(l => l.City).ThenInclude(c => c.Country)
+                .Where(e => _context.FavouriteEvents
+                .Any(f => f.Event_Id == e.Id && f.User_Id == UserId))
+                .ToListAsync();
+
+            var eventsGet = new List<EventGetVM>();
+
+            foreach (var e in events)
+            {
+                var eventGet = new EventGetVM
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    DateTime = e.DateTime,
+                    Description = e.Description,
+                    RegistrationDeadline = e.RegistrationDeadline,
+                    Location_id = e.Location_id,
+                    Location = e.Location,
+                    EventType = e.EventType,
+                    EventType_id = e.EventType_id,
+                    Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
+                    UserFavourite = true,
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
                 };
                 eventsGet.Add(eventGet);
             }

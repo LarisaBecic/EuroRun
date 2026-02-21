@@ -7,6 +7,7 @@ namespace EuroRunAPI.Data
 {
     public class ApplicationDbContext : DbContext
     {
+
         public DbSet<City> Cities { get; set; }
 
         public DbSet<Country> Countries { get; set; }
@@ -47,6 +48,7 @@ namespace EuroRunAPI.Data
 
         public DbSet<Gender> Genders { get; set; }
 
+        public DbSet<FavouriteEvent> FavouriteEvents { get; set; }
 
         public ApplicationDbContext(DbContextOptions options) : base(options) { }
 
@@ -88,10 +90,22 @@ namespace EuroRunAPI.Data
                 .HasOne(r => r.Event)
                 .WithMany() 
                 .HasForeignKey(r => r.Event_id)
-                .OnDelete(DeleteBehavior.NoAction); // Prevent cascading delete
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<FavouriteEvent>()
+                .HasKey(f => new { f.User_Id, f.Event_Id });
+
+            modelBuilder.Entity<FavouriteEvent>()
+                .HasOne(f => f.User)
+                .WithMany()
+                .HasForeignKey(f => f.User_Id)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<FavouriteEvent>()
+                .HasOne(f => f.Event)
+                .WithMany()
+                .HasForeignKey(f => f.Event_Id)
+                .OnDelete(DeleteBehavior.NoAction);
         }
-
-       
-
     }
 }

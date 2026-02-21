@@ -7,11 +7,20 @@ import { AuthentificationHelper } from '../helpers/authentification-helper';
 import { AuthService } from '../helpers/auth.service';
 import { Gender } from '../model/Gender.model';
 
+declare var grecaptcha: any;
+
+declare global {
+    interface Window {
+        onCaptchaSuccess: (token: string) => void;
+    }
+}
+
 @Component({
     selector: 'app-auth',
     templateUrl: './auth.component.html',
     styleUrl: './auth.component.css',
 })
+
 export class AuthComponent implements OnInit {
 
     genders: Gender[] = [];
@@ -48,6 +57,7 @@ export class AuthComponent implements OnInit {
         password: ''
     };
 
+    captchaToken: string | null = null;
 
     constructor(private httpClient: HttpClient, private router: Router, private authService: AuthService) {
     }
@@ -55,6 +65,25 @@ export class AuthComponent implements OnInit {
     ngOnInit(): void {
         this.getGenders();
     }
+
+    ngAfterViewInit() {
+
+    window.onCaptchaSuccess = (token: string) => {
+      this.captchaToken = token;
+    };
+
+    const interval = setInterval(() => {
+      if (typeof grecaptcha !== 'undefined') {
+
+        grecaptcha.render('recaptcha-container', {
+          sitekey: 'my_site_key',
+          callback: 'onCaptchaSuccess'
+        });
+
+        clearInterval(interval);
+      }
+    }, 300);
+  }
 
     logIn() {
         if (!this.validateLogin()) return;
@@ -95,6 +124,11 @@ export class AuthComponent implements OnInit {
     register() {
         if (!this.validateRegister()) return;
 
+        if (!this.captchaToken) {
+            alert("Please complete captcha");
+            return;
+        }
+
         let registerInfo = {
             firstName: this.txtFirstName,
             lastName: this.txtLastName,
@@ -106,17 +140,20 @@ export class AuthComponent implements OnInit {
             active: this.active,
             dateOfBirth: this.dateOfBirth,
             gender_id: this.gender_id,
-            role_id: this.role
+            role_id: this.role,
+            captchaToken: this.captchaToken
         };
 
         if (this.txtFirstName && this.txtLastName && this.txtPhoneNumber && this.txtEmail && this.txtUsernameRegister && this.txtPasswordRegister) {
-            this.httpClient.post<void>(Config.api + "/UserAccount/Add", registerInfo).subscribe({
+            this.httpClient.post<void>(Config.api + "/UserAccount/Register", registerInfo).subscribe({
                 next: () => {
                     this.router.navigate([''], {
                         state: { message: 'Registration successful! You can now log in.' }
                     });
                 },
                 error: (error) => {
+                    grecaptcha.reset(); 
+                    this.captchaToken = null;
                     alert(error.error);
                 }
             })
@@ -248,7 +285,4 @@ export class AuthComponent implements OnInit {
 
         return Object.values(this.registerErrors).every(e => !e);
     }
-
-
-
 }

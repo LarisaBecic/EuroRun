@@ -12,6 +12,8 @@ export interface Event {
   location_id: number;
   location: Location;
   picture?: string;
+  userFavourite?: boolean;
+  favouritedTimes: number;
 }
 
 export interface EventAddUpdate {

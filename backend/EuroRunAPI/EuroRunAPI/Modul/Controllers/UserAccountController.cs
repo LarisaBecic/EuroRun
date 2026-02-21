@@ -4,6 +4,7 @@ using EuroRunAPI.Modul.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EuroRunAPI.Helpers;
+using EuroRunAPI.Authentification.Helpers;
 
 namespace EuroRunAPI.Modul.Controllers
 {
@@ -14,15 +15,17 @@ namespace EuroRunAPI.Modul.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly PasswordHasher _passwordHasher;
+        private readonly VerifyCaptchaHelper _verifyCaptchaHelper;
 
-        public UserAccountController(ApplicationDbContext context)
+        public UserAccountController(ApplicationDbContext context, VerifyCaptchaHelper verifyCaptchaHelper)
         {
             _context = context;
             _passwordHasher = new PasswordHasher();
+            _verifyCaptchaHelper = verifyCaptchaHelper;
         }
 
         [HttpPost]
-        public async Task<ActionResult> Add([FromBody] UserAccountAddVM UserAccountAdd)
+        public async Task<ActionResult> Register([FromBody] UserAccountAddVM UserAccountAdd)
         {
             var usernameNew = UserAccountAdd.UserName.Trim().ToLower(); 
 
@@ -39,6 +42,11 @@ namespace EuroRunAPI.Modul.Controllers
 
             if (existsMail)
                 return Conflict("This email is already taken!");
+
+            var isCaptchaValid = await _verifyCaptchaHelper.VerifyCaptcha(UserAccountAdd.CaptchaToken);
+
+            if (!isCaptchaValid)
+                return BadRequest("Captcha validation failed!");
 
             var NewUserAccount = new UserAccount
             {

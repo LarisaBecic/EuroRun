@@ -2,7 +2,7 @@ import {AuthentificationHelper} from "./helpers/authentification-helper";
 import {AuthentificationToken} from "./helpers/login-info";
 
 export class Config{
-  static api = "https://localhost:7249";
+  static api = "http://10.0.0.7:7249"; //localhost rules: https://localhost..
 
   static http_options = function () {
     // @ts-ignore

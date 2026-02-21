@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Config } from '../config';
@@ -30,11 +30,24 @@ export class EventComponent implements OnInit {
     dateOfBirth = '';
     gender_id: number | null = null;
 
+    user_id: number | null = null;
+    event_id: number | null = null;
+
     club = '';
     shirtSize = '';
     numberOfFinishedRaces: number | null = null;
     eventDiscoverySource = '';
     note = '';
+
+    zoomImage: string | null = null;
+
+    scale = 1;
+    posX = 0;
+    posY = 0;
+
+    private isPanning = false;
+    private startX = 0;
+    private startY = 0;
 
     constructor(
         private httpClient: HttpClient,
@@ -48,13 +61,14 @@ export class EventComponent implements OnInit {
             this.loginInfo = info;
             if (info?.authentificationToken) {
                 this.syncUserToForm(info.authentificationToken.userAccount);
+                this.user_id = info.authentificationToken.userAccount.id;
             }
 
         });
 
-        const eventId = Number(this.route.snapshot.paramMap.get('id'));
-        if (eventId) {
-            this.getEventById(eventId);
+        this.event_id = Number(this.route.snapshot.paramMap.get('id'));
+        if (this.event_id) {
+            this.getEventById(this.event_id);
         }
 
         this.getGenders();
@@ -70,10 +84,52 @@ export class EventComponent implements OnInit {
     }
 
     getEventById(id: number) {
+        let url: string = "";
+        if (this.user_id != null) {
+            url = '/Event/GetById/id?id=' + id + '&UserId=' + this.user_id;
+        }
+        else {
+            url = '/Event/GetById/id?id=' + id;
+        }
+
         this.httpClient
-            .get<Event>(Config.api + '/Event/GetById/id?id=' + id, Config.http_options())
+            .get<Event>(Config.api + url, Config.http_options())
             .subscribe(res => this.event = res);
     }
+
+    toggleFavourite(eventClick: MouseEvent) {
+        eventClick.stopPropagation();
+
+        if (!this.user_id) {
+            alert("You must be logged in.");
+            return;
+        }
+
+        const body = {
+            user_Id: this.user_id,
+            event_Id: this.event_id
+        };
+
+        if (this.event!.userFavourite) {
+            this.httpClient
+                .delete(Config.api + '/FavouriteEvent/Delete', {
+                    ...Config.http_options(),
+                    body: body
+                })
+                .subscribe(() => {
+                    this.event!.userFavourite = false;
+                    this.event!.favouritedTimes--;
+                });
+        } else {
+            this.httpClient
+                .post(Config.api + '/FavouriteEvent/Add', body, Config.http_options())
+                .subscribe(() => {
+                    this.event!.userFavourite = true;
+                    this.event!.favouritedTimes++;
+                });
+        }
+    }
+
 
     getGenders() {
         this.httpClient
@@ -158,5 +214,56 @@ export class EventComponent implements OnInit {
                 this.closeWizard();
                 alert('Successfully registered!');
             });
+    }
+
+    get transformStyle() {
+        return `translate(${this.posX}px, ${this.posY}px) scale(${this.scale})`;
+    }
+
+    openZoom(img: string) {
+        this.zoomImage = img;
+        this.scale = 1;
+        this.posX = 0;
+        this.posY = 0;
+    }
+
+    closeZoom() {
+        this.zoomImage = null;
+    }
+
+    onWheel(event: WheelEvent) {
+        event.preventDefault();
+
+        const zoomSpeed = 0.1;
+
+        if (event.deltaY < 0) {
+            this.scale += zoomSpeed;
+        } else {
+            this.scale -= zoomSpeed;
+        }
+
+        this.scale = Math.min(Math.max(this.scale, 0.5), 5);
+    }
+
+    startPan(event: MouseEvent) {
+        this.isPanning = true;
+        this.startX = event.clientX - this.posX;
+        this.startY = event.clientY - this.posY;
+    }
+
+    onPan(event: MouseEvent) {
+        if (!this.isPanning) return;
+
+        this.posX = event.clientX - this.startX;
+        this.posY = event.clientY - this.startY;
+    }
+
+    stopPan() {
+        this.isPanning = false;
+    }
+
+    @HostListener('document:keydown.escape')
+    handleEscape() {
+        this.closeZoom();
     }
 }

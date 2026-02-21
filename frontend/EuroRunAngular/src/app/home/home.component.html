@@ -5,15 +5,35 @@
   </div>
 </section>
 <section class="top-events">
-  <h2>Popular events</h2>
-  <div class="scroll">
+
+  <div class="carousel-header">
+    <button mat-icon-button (click)="scrollLeft()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+
+    <h2>Popular events</h2>
+
+    <button mat-icon-button (click)="scrollRight()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+
+  <div #scrollContainer class="scroll">
     <div class="event-card" *ngFor="let e of events" [routerLink]="['/event', e.id]">
       <img *ngIf="e.picture" [src]="'data:image/jpeg;base64,' + e.picture" />
       <h3>{{ e.name }}</h3>
       <p>{{ e.location.name }}</p>
+      <div class="fav-div">
+        <mat-icon class="heart-icon">
+          {{ e.userFavourite ? 'favorite' : 'favorite_border' }}
+        </mat-icon>
+        <span class="fav-count">{{ e.favouritedTimes }}</span>
+      </div>
     </div>
   </div>
+
 </section>
+
 <section class="hero">
   <img src="berlin.jpg" />
   <div class="hero-content">
