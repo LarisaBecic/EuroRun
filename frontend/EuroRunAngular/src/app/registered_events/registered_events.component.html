@@ -12,18 +12,38 @@
           <th>Registration Date</th>
           <th>Location</th>
           <th>Type</th>
+          <th>QR</th>
+          <th>Details</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let re of registeredEvents" (click)="openDetails(re)">
+        <tr *ngFor="let re of registeredEvents">
           <td>{{ re.event.name }}</td>
           <td>{{ re.event.dateTime | date:'short' }}</td>
           <td>{{ re.registrationDate | date:'short' }}</td>
           <td>{{ re.event.location.name }}</td>
           <td>{{ re.event.eventType.name }}</td>
+          <td><button class="btn-primary" (click)="openQRcode(re.id)">QR Code</button></td>
+          <td><button class="btn-primary" (click)="openDetails(re)">Details</button></td>
         </tr>
       </tbody>
     </table>
+  </div>
+
+  <div class="overlay" *ngIf="isQRcodeOpen">
+    <div class="qr-card">
+      <div class="qr-wrapper">
+        <h3>Your Entry QR Code</h3>
+        <qrcode [qrdata]="qrValue" [width]="200" [errorCorrectionLevel]="'M'">
+        </qrcode>
+        <p class="small-text">
+          Show this QR code at the event entrance.
+        </p>
+        <div class="actions">
+          <button class="btn-secondary" (click)="closeQRcode()">Close</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="overlay" *ngIf="isDetailsOpen && selectedRegistration">
@@ -42,8 +62,10 @@
       <section>
         <h4>Location</h4>
         <p><strong>Name:</strong> {{ selectedRegistration.event.location.name }}</p>
-        <p><strong>City:</strong> {{ selectedRegistration.event.location.city.name }}, {{ selectedRegistration.event.location.city.country.name }}</p>
-        <p><strong>Coordinates:</strong> {{ selectedRegistration.event.location.latitude }}, {{ selectedRegistration.event.location.longitude }}</p>
+        <p><strong>City:</strong> {{ selectedRegistration.event.location.city.name }}, {{
+          selectedRegistration.event.location.city.country.name }}</p>
+        <p><strong>Coordinates:</strong> {{ selectedRegistration.event.location.latitude }}, {{
+          selectedRegistration.event.location.longitude }}</p>
       </section>
 
       <section>

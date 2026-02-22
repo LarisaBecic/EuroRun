@@ -18,6 +18,8 @@ import { AuthGuard } from './guards/auth.guard';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { FavouriteEventsComponent } from './favourite_events/favourite_events.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { AdminRegistrationComponent } from './admin_registration/admin_registration.component';
 
 @NgModule({
   declarations: [
@@ -29,11 +31,13 @@ import { FavouriteEventsComponent } from './favourite_events/favourite_events.co
     EventComponent,
     RegisteredEventsComponent,
     SearchResultsComponent,
-    FavouriteEventsComponent
+    FavouriteEventsComponent,
+    AdminRegistrationComponent
   ],
   bootstrap: [AppComponent],
   imports: [
     BrowserModule,
+    QRCodeModule,
     FormsModule,
     MarkdownModule.forRoot(),
     MatButtonModule,
@@ -47,6 +51,7 @@ import { FavouriteEventsComponent } from './favourite_events/favourite_events.co
       { path: 'registered-events', component: RegisteredEventsComponent, canActivate: [AuthGuard] },
       { path: 'favourite-events', component: FavouriteEventsComponent, canActivate: [AuthGuard] },
       { path: 'results', component: SearchResultsComponent },
+      { path: 'admin/registration/:id', component: AdminRegistrationComponent },
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]),
   ],

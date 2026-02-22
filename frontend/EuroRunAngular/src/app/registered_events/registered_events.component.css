@@ -69,6 +69,16 @@
   box-shadow: 0 12px 28px rgba(0,0,0,0.2);
 }
 
+.qr-card {
+  background: #fff;
+  padding: 28px;
+  max-width: 650px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+}
+
 .details-card h3 {
   margin-top: 0;
   font-size: 22px;

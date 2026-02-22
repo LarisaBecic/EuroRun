@@ -17,9 +17,12 @@ export class RegisteredEventsComponent implements OnInit {
   loginInfo: LoginInfo | null = null;
   user_id: number | null = null;
 
-  // NEW
   selectedRegistration: EventRegistration | null = null;
   isDetailsOpen = false;
+
+  isQRcodeOpen = false;
+
+  qrValue: string = "";
 
   constructor(private httpClient: HttpClient, private authService: AuthService) { }
 
@@ -51,6 +54,16 @@ export class RegisteredEventsComponent implements OnInit {
   closeDetails() {
     this.isDetailsOpen = false;
     this.selectedRegistration = null;
+  }
+
+  openQRcode(id: number) {
+    this.qrValue = `${window.location.origin}/admin/registration/${id}`;
+    this.isQRcodeOpen = true;
+  }
+
+  closeQRcode() {
+    this.isQRcodeOpen = false;
+    this.qrValue = "";
   }
 
   updateComingSoon() {

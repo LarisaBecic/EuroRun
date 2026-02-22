@@ -16,5 +16,7 @@ namespace EuroRunAPI.Modul.ViewModels
         public int Location_id { get; set; }
         public Location Location { get; set; }
         public string? Picture { get; set; }
+        public bool? UserFavourite { get; set; }
+        public int FavouritedTimes { get; set; }
     }
 }

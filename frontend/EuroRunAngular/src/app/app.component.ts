@@ -33,7 +33,7 @@ export class AppComponent {
       'Accept': 'image/png'
     });
 
-    this.httpClient.get("https://localhost:7249/Logo/Get", { headers, responseType: 'blob' })
+    this.httpClient.get("http://10.0.0.7:7249/Logo/Get", { headers, responseType: 'blob' })
       .subscribe(response => {
         const objectURL = URL.createObjectURL(response);
         this.Logo = objectURL;
