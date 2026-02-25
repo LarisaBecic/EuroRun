@@ -24,5 +24,6 @@ namespace EuroRunAPI.Modul.Models
         public int Location_id { get; set; }
         public Location Location { get; set; }
         public byte[]? Picture { get; set; }
+        public double EntryFee { get; set; }
     }
 }

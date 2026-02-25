@@ -21,4 +21,6 @@ export interface EventRegistrationAdd {
   numberOfFinishedRaces?: number;
   eventDiscoverySource?: string;
   note?: string;
+  stripePaymentIntentId: string;
+  stripeError: string;
 }

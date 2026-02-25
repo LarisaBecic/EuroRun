@@ -195,7 +195,7 @@ export class AdminRegistrationComponent implements OnInit {
     }
 
 
-    addEventRegistration() {
+    /*addEventRegistration() {
         if (!this.loginInfo?.authentificationToken || !this.event) return;
 
         const reg: EventRegistrationAdd = {
@@ -205,7 +205,8 @@ export class AdminRegistrationComponent implements OnInit {
             shirtSize: this.shirtSize,
             numberOfFinishedRaces: this.numberOfFinishedRaces ?? undefined,
             eventDiscoverySource: this.eventDiscoverySource,
-            note: this.note
+            note: this.note,
+            
         };
 
         this.httpClient
@@ -214,7 +215,7 @@ export class AdminRegistrationComponent implements OnInit {
                 this.closeWizard();
                 alert('Successfully registered!');
             });
-    }
+    }*/
 
     get transformStyle() {
         return `translate(${this.posX}px, ${this.posY}px) scale(${this.scale})`;

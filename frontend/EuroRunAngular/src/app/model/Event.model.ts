@@ -14,6 +14,7 @@ export interface Event {
   picture?: string;
   userFavourite?: boolean;
   favouritedTimes: number;
+  entryFee: number;
 }
 
 export interface EventAddUpdate {
@@ -24,4 +25,5 @@ export interface EventAddUpdate {
   description: string;
   registrationDeadline: string;
   picture?: string;
+  entryFee: number;
 }

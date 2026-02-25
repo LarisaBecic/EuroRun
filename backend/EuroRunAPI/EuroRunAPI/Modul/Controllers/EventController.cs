@@ -38,7 +38,8 @@ namespace EuroRunAPI.Modul.Controllers
                 DateTime=EventAdd.DateTime,   
                 Description = EventAdd.Description,
                 RegistrationDeadline = EventAdd.RegistrationDeadline,
-                Picture = PictureBytes
+                Picture = PictureBytes,
+                EntryFee = EventAdd.EntryFee
             };
             await _context.Events.AddAsync(NewEvent);
             await _context.SaveChangesAsync();
@@ -66,6 +67,7 @@ namespace EuroRunAPI.Modul.Controllers
                 Event.Description = EventUpdate.Description;
                 Event.RegistrationDeadline = EventUpdate.RegistrationDeadline;
                 Event.Picture = PictureBytes;
+                Event.EntryFee = EventUpdate.EntryFee;
                 await _context.SaveChangesAsync();
                 return Ok();
             }
@@ -114,7 +116,8 @@ namespace EuroRunAPI.Modul.Controllers
                     EventType_id = eventDb.EventType_id,
                     Picture = eventDb.Picture != null ? Convert.ToBase64String(eventDb.Picture) : null,
                     UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == eventDb.Id && f.User_Id == UserId),
-                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == eventDb.Id)
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == eventDb.Id),
+                    EntryFee = eventDb.EntryFee
                 };
                 return Ok(eventGet);
             }
@@ -144,7 +147,8 @@ namespace EuroRunAPI.Modul.Controllers
                     EventType_id = e.EventType_id,
                     Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
                     UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == e.Id && f.User_Id == UserId),
-                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id),
+                    EntryFee = e.EntryFee
                 };
                 eventsGet.Add(eventGet);
             }
@@ -177,7 +181,8 @@ namespace EuroRunAPI.Modul.Controllers
                 EventType_id = e.EventType_id,
                 Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
                 UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == e.Id && f.User_Id == UserId),
-                FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
+                FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id),
+                EntryFee = e.EntryFee
             }).ToList();
 
             return Ok(eventsGet);
@@ -215,7 +220,8 @@ namespace EuroRunAPI.Modul.Controllers
                     EventType_id = e.EventType_id,
                     Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
                     UserFavourite = UserId == null ? null : _context.FavouriteEvents.Any(f => f.Event_Id == e.Id && f.User_Id == UserId),
-                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id),
+                    EntryFee = e.EntryFee
                 };
                 eventsGet.Add(eventGet);
             }
@@ -250,7 +256,8 @@ namespace EuroRunAPI.Modul.Controllers
                     EventType_id = e.EventType_id,
                     Picture = e.Picture != null ? Convert.ToBase64String(e.Picture) : null,
                     UserFavourite = true,
-                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id)
+                    FavouritedTimes = _context.FavouriteEvents.Count(f => f.Event_Id == e.Id),
+                    EntryFee = e.EntryFee
                 };
                 eventsGet.Add(eventGet);
             }

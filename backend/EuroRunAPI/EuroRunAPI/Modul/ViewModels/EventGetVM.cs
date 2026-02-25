@@ -18,5 +18,6 @@ namespace EuroRunAPI.Modul.ViewModels
         public string? Picture { get; set; }
         public bool? UserFavourite { get; set; }
         public int FavouritedTimes { get; set; }
+        public double EntryFee { get; set; }
     }
 }

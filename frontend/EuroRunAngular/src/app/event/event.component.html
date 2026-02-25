@@ -1,11 +1,11 @@
-<div class="event-container" *ngIf="event">
+<div class="event-container" *ngIf="loadedEvent">
   <div class="event-header">
-    <h1>{{ event.name }}</h1>
-    <p class="date">{{ event.dateTime | date:'fullDate' }}</p>
+    <h1>{{ loadedEvent.name }}</h1>
+    <p class="date">{{ loadedEvent.dateTime | date:'fullDate' }}</p>
   </div>
 
-  <div class="event-image" *ngIf="event.picture">
-    <img [src]="'data:image/jpeg;base64,' + event.picture" alt="Event Image" (click)="openZoom(event.picture)"
+  <div class="event-image" *ngIf="loadedEvent.picture">
+    <img [src]="'data:image/jpeg;base64,' + loadedEvent.picture" alt="Event Image" (click)="openZoom(loadedEvent.picture)"
       class="clickable-image">
   </div>
 
@@ -17,19 +17,22 @@
 
 
   <div class="event-info">
-    <p class="description">{{ event.description }}</p>
+    <p class="description">{{ loadedEvent.description }}</p>
     <div class="location">
-      📍 {{ event.location.name }} – {{ event.location.city.name }} – {{ event.location.city.country.name }}
+      📍 {{ loadedEvent.location.name }} – {{ loadedEvent.location.city.name }} – {{ loadedEvent.location.city.country.name }}
     </div>
     <div class="event-type">
-      🏷️ {{ event.eventType.name }}
+      🏷️ {{ loadedEvent.eventType.name }}
+    </div>
+    <div class="entryFee">
+      💵 €{{ loadedEvent.entryFee }}
     </div>
     <div class="fav-div" (click)="$event.stopPropagation()">
       <mat-icon class="heart-icon" (click)="toggleFavourite($event)">
-        {{ event.userFavourite ? 'favorite' : 'favorite_border' }}
+        {{ loadedEvent.userFavourite ? 'favorite' : 'favorite_border' }}
       </mat-icon>
 
-      <span class="fav-count">{{ event.favouritedTimes }}</span>
+      <span class="fav-count">{{ loadedEvent.favouritedTimes }}</span>
     </div>
 
   </div>
@@ -66,7 +69,7 @@
           <div class="wizard-actions">
             <button class="btn-text" (click)="closeWizard()">Cancel</button>
             <button class="btn-primary" (click)="updateUser()">Update Details</button>
-            <button class="btn-primary" (click)="wizardStep = 2">Next</button>
+            <button class="btn-primary" (click)="goToStep(2)">Next</button>
           </div>
         </div>
 
@@ -81,8 +84,8 @@
 
           <div class="wizard-actions">
             <button class="btn-text" (click)="closeWizard()">Cancel</button>
-            <button class="btn-text" (click)="wizardStep = 1">Back</button>
-            <button class="btn-primary" (click)="wizardStep = 3">Next</button>
+            <button class="btn-text" (click)="goToStep(1)">Back</button>
+            <button class="btn-primary" (click)="goToStep(3)">Next</button>
           </div>
         </div>
 
@@ -91,20 +94,25 @@
 
           <p><b>Name:</b> {{ firstName }} {{ lastName }}</p>
           <p><b>Email:</b> {{ email }}</p>
-          <p><b>Event:</b> {{ event.name }}</p>
-          <p><b>Date:</b> {{ event.dateTime | date:'fullDate' }}</p>
-          <p><b>Location:</b> {{ event.location.name }} – {{ event.location.city.name }} – {{
-            event.location.city.country.name }}</p>
+          <p><b>Event:</b> {{ loadedEvent.name }}</p>
+          <p><b>Date:</b> {{ loadedEvent.dateTime | date:'fullDate' }}</p>
+          <p><b>Location:</b> {{ loadedEvent.location.name }} – {{ loadedEvent.location.city.name }} – {{
+            loadedEvent.location.city.country.name }}</p>
+          <p><b>Entry Fee:</b> €{{ loadedEvent.entryFee }}</p>
           <p><b>Club:</b> {{ club }}</p>
           <p><b>Shirt Size:</b> {{ shirtSize }}</p>
           <p><b>Finished Races:</b> {{ numberOfFinishedRaces }}</p>
           <p><b>Notes:</b> {{ note }}</p>
 
-          <div class="wizard-actions">
+          <form (submit)="handleSubmit($event, loadedEvent)">
+            <div #cardContainer id="card-element"></div>
+            <div class="wizard-actions">
             <button class="btn-text" (click)="closeWizard()">Cancel</button>
-            <button class="btn-text" (click)="wizardStep = 2">Back</button>
-            <button class="btn-primary" (click)="addEventRegistration()">Confirm</button>
+            <button class="btn-text" (click)="goToStep(2)">Back</button>
+            <button lass="btn-primary" type="submit">Confirm and Pay</button>
+            <!--<button class="btn-primary" (click)="addEventRegistration()">Confirm</button>-->
           </div>
+          </form>
         </div>
 
       </div>

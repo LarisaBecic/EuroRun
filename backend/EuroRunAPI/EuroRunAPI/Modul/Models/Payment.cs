@@ -7,15 +7,9 @@ namespace EuroRunAPI.Modul.Models
     {
         [Key]
         public int Id { get; set; }
-
-        public int Total { get; set; }
-
-        [ForeignKey(nameof(EventRegistration))]
-        public int EventRegistration_id { get; set; }
-        public EventRegistration EventRegistration { get; set; }
-
-        [ForeignKey(nameof(CreditCard))]
-        public int CreditCard_id { get; set; }
-        public CreditCard CreditCard { get; set; }
+        public double Amount { get; set; }
+        public string StripePaymentIntendId { get; set; }
+        public string Status { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

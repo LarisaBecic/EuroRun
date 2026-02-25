@@ -12,6 +12,7 @@
           <th>Registration Date</th>
           <th>Location</th>
           <th>Type</th>
+          <th>Entry Fee</th>
           <th>QR</th>
           <th>Details</th>
         </tr>
@@ -23,6 +24,7 @@
           <td>{{ re.registrationDate | date:'short' }}</td>
           <td>{{ re.event.location.name }}</td>
           <td>{{ re.event.eventType.name }}</td>
+          <td>€{{ re.event.entryFee }}</td>
           <td><button class="btn-primary" (click)="openQRcode(re.id)">QR Code</button></td>
           <td><button class="btn-primary" (click)="openDetails(re)">Details</button></td>
         </tr>
@@ -57,6 +59,7 @@
         <p><strong>Date:</strong> {{ selectedRegistration.event.dateTime | date:'full' }}</p>
         <p><strong>Type:</strong> {{ selectedRegistration.event.eventType.name }}</p>
         <p><strong>Description:</strong> {{ selectedRegistration.event.description }}</p>
+        <p><strong>Entry Fee:</strong> €{{ selectedRegistration.event.entryFee }}</p>
       </section>
 
       <section>

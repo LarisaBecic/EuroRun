@@ -29,7 +29,8 @@ export class AdminEventsComponent implements OnInit {
     location_id: 0,
     dateTime: '',
     description: '',
-    registrationDeadline: ''
+    registrationDeadline: '',
+    entryFee: 0
   };
 
   constructor(private httpClient: HttpClient, private router: Router) { }
@@ -70,7 +71,8 @@ export class AdminEventsComponent implements OnInit {
       dateTime: '',
       description: '',
       registrationDeadline: '',
-      picture: undefined
+      picture: undefined,
+      entryFee: 0
     };
 
     this.imagePreview = null;
@@ -88,7 +90,8 @@ export class AdminEventsComponent implements OnInit {
       dateTime: event.dateTime,
       description: event.description,
       registrationDeadline: event.registrationDeadline,
-      picture: event.picture
+      picture: event.picture,
+      entryFee: event.entryFee
     };
 
     this.imagePreview = event.picture
@@ -151,11 +154,10 @@ export class AdminEventsComponent implements OnInit {
     reader.onload = () => {
       const base64 = reader.result as string;
 
-      // strip "data:image/...;base64," before sending to backend
       const pureBase64 = base64.split(',')[1];
 
       this.eventForm.picture = pureBase64;
-      this.imagePreview = base64; // keep full data URL for display
+      this.imagePreview = base64;
     };
 
     reader.readAsDataURL(file);

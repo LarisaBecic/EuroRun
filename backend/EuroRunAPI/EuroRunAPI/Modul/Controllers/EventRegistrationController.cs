@@ -1,10 +1,11 @@
 ﻿using EuroRunAPI.Data;
+using EuroRunAPI.Helpers;
 using EuroRunAPI.Modul.Models;
 using EuroRunAPI.Modul.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using EuroRunAPI.Helpers;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using Stripe;
 
 namespace EuroRunAPI.Modul.Controllers
 {
@@ -23,16 +24,28 @@ namespace EuroRunAPI.Modul.Controllers
         [HttpPost]
         public async Task<ActionResult> Add([FromBody] EventRegistrationAddVM eventRegistrationAdd)
         {
-            Event? userEvent = await _context.Events.FindAsync(eventRegistrationAdd.Event_id);
+            Payment? payment = await _context.Payments.FirstOrDefaultAsync(p => p.StripePaymentIntendId == eventRegistrationAdd.StripePaymentIntentId);
 
-            if (userEvent == null)
+            if (payment == null)
             {
-                return BadRequest("This event doesn't exist!");
+                return BadRequest("Payment doesn't exist.");
             }
 
-            if (userEvent.RegistrationDeadline.Date <= DateTime.Now)
+            var newPaymentStatus = await PaymentHelper.VerifyPaymentIntentAsync(eventRegistrationAdd.StripePaymentIntentId);
+
+            payment.Status = newPaymentStatus;
+            await _context.SaveChangesAsync();
+
+            if (newPaymentStatus != "succeeded")
             {
-                return BadRequest("You can only register for events that are at least 3 days away.");
+                if (string.IsNullOrEmpty(eventRegistrationAdd.StripeError))
+                {
+                    return BadRequest("Payment not successful - unknown error. Please try again.");
+                }
+                else
+                {
+                    return BadRequest("Payment not successful - Details: " + eventRegistrationAdd.StripeError + " Please try again.");
+                }   
             }
 
             var newEventRegistration = new EventRegistration
@@ -44,7 +57,8 @@ namespace EuroRunAPI.Modul.Controllers
                 ShirtSize = eventRegistrationAdd.ShirtSize,
                 NumberOfFinishedRaces = eventRegistrationAdd.NumberOfFinishedRaces,
                 EventDiscoverySource = eventRegistrationAdd.EventDiscoverySource,
-                Note = eventRegistrationAdd.Note
+                Note = eventRegistrationAdd.Note,
+                Payment_id = payment.Id
             };
 
             await _context.EventRegistrations.AddAsync(newEventRegistration);

@@ -19,6 +19,10 @@ namespace EuroRunAPI.Modul.Models
         public int Event_id { get; set; }
         public Event Event { get; set; }
 
+        [ForeignKey(nameof(Payment))]
+        public int Payment_id { get; set; }
+        public Payment Payment { get; set; }
+
         public string? Club { get; set; }
         public string? ShirtSize { get; set; }
         public int? NumberOfFinishedRaces { get; set; }

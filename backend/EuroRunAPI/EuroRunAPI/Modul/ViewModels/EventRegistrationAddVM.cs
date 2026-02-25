@@ -13,5 +13,7 @@ namespace EuroRunAPI.Modul.ViewModels
         public int? NumberOfFinishedRaces { get; set; }
         public string? EventDiscoverySource { get; set; }
         public string? Note { get; set; }
+        public string StripePaymentIntentId { get; set; }
+        public string? StripeError { get; set; }
     }
 }

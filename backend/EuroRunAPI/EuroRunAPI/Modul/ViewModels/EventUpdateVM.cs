@@ -9,5 +9,6 @@
         public string Description { get; set; }
         public DateTime RegistrationDeadline { get; set; }
         public string? Picture { get; set; }
+        public double EntryFee { get; set; }
     }
 }

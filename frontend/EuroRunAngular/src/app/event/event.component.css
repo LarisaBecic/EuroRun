@@ -61,7 +61,7 @@
   margin-bottom: 15px;
 }
 
-.location, .event-type {
+.location, .event-type, .entryFee {
   font-weight: 500;
   margin-bottom: 10px;
 }

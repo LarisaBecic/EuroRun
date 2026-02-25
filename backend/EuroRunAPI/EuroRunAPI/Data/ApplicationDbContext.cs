@@ -68,6 +68,12 @@ namespace EuroRunAPI.Data
                 .HasForeignKey(e => e.Event_id)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<EventRegistration>()
+                .HasOne(e => e.Payment)
+                .WithMany()
+                .HasForeignKey(e => e.Payment_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<ChallengeVerification>()
                 .HasOne(cv => cv.Event)
                 .WithMany()

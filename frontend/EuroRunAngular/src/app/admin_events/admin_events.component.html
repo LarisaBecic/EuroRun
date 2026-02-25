@@ -14,6 +14,7 @@
           <th>Date</th>
           <th>Location</th>
           <th>Type</th>
+          <th>Entry Fee</th>
           <th></th>
         </tr>
       </thead>
@@ -24,6 +25,7 @@
           <td>{{ e.dateTime | date:'short' }}</td>
           <td>{{ e.location.name }}</td>
           <td>{{ e.eventType.name }}</td>
+          <td>€{{ e.entryFee }}</td>
           <td class="actions">
             <button
               class="btn-danger"
@@ -38,7 +40,6 @@
 
   </div>
 
-  <!-- MODAL -->
   <div class="modal-backdrop" *ngIf="isFormOpen">
     <div class="modal-card">
      <div class="modal-content">
@@ -77,6 +78,9 @@
           (ngModelChange)="onDateTimeChange('registrationDeadline', $event)" />
         <label>Description</label>
         <textarea [(ngModel)]="eventForm.description"></textarea>
+
+        <label>Entry Fee (€)</label>
+        <input type="number" [(ngModel)]="eventForm.entryFee"/>
 
         <label>Event Picture</label>
         <input type="file" accept="image/*" (change)="onImageSelected($event)" />

@@ -213,6 +213,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 EventType_id=eventtype2.Id,
                 Location_id=location1.Id,
                 Picture = mostar,
+                EntryFee = 20
             };
 
             await _dbContext.Events.AddAsync(event1);
@@ -227,6 +228,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 EventType_id = eventtype3.Id,
                 Location_id = location2.Id,
                 Picture = mostar,
+                EntryFee = 25
             };
 
             await _dbContext.Events.AddAsync(event2);
@@ -241,6 +243,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 EventType_id = eventtype2.Id,
                 Location_id = location3.Id,
                 Picture = sarajevo,
+                EntryFee = 25
             }; 
 
             await _dbContext.Events.AddAsync(event3);
@@ -255,6 +258,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 EventType_id = eventtype3.Id,
                 Location_id = location2.Id,
                 Picture = mostar,
+                EntryFee = 30
             };
 
             await _dbContext.Events.AddAsync(event4);
@@ -269,6 +273,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 EventType_id = eventtype2.Id,
                 Location_id = location3.Id,
                 Picture = sarajevo,
+                EntryFee = 35
             };
 
             await _dbContext.Events.AddAsync(event5);
@@ -283,6 +288,7 @@ namespace EuroRunAPI.TestDataModul.Controllers
                 EventType_id = eventtype2.Id,
                 Location_id = location3.Id,
                 Picture = sarajevo,
+                EntryFee = 27
             };
 
             await _dbContext.Events.AddAsync(event6);
@@ -315,25 +321,9 @@ namespace EuroRunAPI.TestDataModul.Controllers
             await _dbContext.Awards.AddAsync(award3);
             await _dbContext.SaveChangesAsync();
 
-            var registration = new EventRegistration
-            {
-                RegistrationDate = DateTime.Now,
-                UserAccount_id = useraccount2.Id,
-                Event_id = event1.Id,
-                Club = "HPD Prenj 1933",
-                ShirtSize = "L",
-                NumberOfFinishedRaces = 3,
-                EventDiscoverySource = "Instagram",
-                Note = "..."
-            };
-
-            await _dbContext.EventRegistrations.AddAsync(registration);
-            await _dbContext.SaveChangesAsync();
-
             Dictionary<string, int> data = new Dictionary<string, int>();
             data.Add("Countries", _dbContext.Countries.Count());
             data.Add("Cities", _dbContext.Cities.Count());
-            data.Add("EventRegistrations", _dbContext.EventRegistrations.Count());
             data.Add("Locations", _dbContext.Locations.Count());
             data.Add("Roles", _dbContext.Roles.Count());
             data.Add("Genders", _dbContext.Genders.Count());

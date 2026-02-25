@@ -1,12 +1,15 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { ActivatedRoute, Router } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Config } from '../config';
-import { Event } from '../model/Event.model';
+import { Event as AppEvent } from '../model/Event.model';
 import { EventRegistrationAdd } from '../model/EventRegistration.model';
 import { Gender } from '../model/Gender.model';
 import { LoginInfo, UserAccount } from '../helpers/login-info';
 import { AuthService } from '../helpers/auth.service';
+import { loadStripe, Stripe, StripeElements, StripeCardElement } from '@stripe/stripe-js';
+import { PaymentService } from '../helpers/payment.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
     selector: 'app-event',
@@ -15,7 +18,7 @@ import { AuthService } from '../helpers/auth.service';
 })
 export class EventComponent implements OnInit {
 
-    event: Event | null = null;
+    loadedEvent: AppEvent | null = null;
     loginInfo: LoginInfo | null = null;
 
     genders: Gender[] = [];
@@ -49,14 +52,21 @@ export class EventComponent implements OnInit {
     private startX = 0;
     private startY = 0;
 
+    @ViewChild('cardContainer') cardContainer!: ElementRef;
+    stripe!: Stripe;
+    elements!: StripeElements;
+    card!: StripeCardElement;
+    clientSecret!: string;
+    errorMessage = '';
+
     constructor(
         private httpClient: HttpClient,
         private route: ActivatedRoute,
-        private router: Router,
-        private authService: AuthService
+        private authService: AuthService,
+        private paymentService: PaymentService
     ) { }
 
-    ngOnInit(): void {
+    async ngOnInit() {
         this.authService.loginInfo$.subscribe(info => {
             this.loginInfo = info;
             if (info?.authentificationToken) {
@@ -72,6 +82,52 @@ export class EventComponent implements OnInit {
         }
 
         this.getGenders();
+    }
+
+    async goToStep(step: number) {
+        this.wizardStep = step;
+        if (step === 3 && !this.card) {
+            setTimeout(async () => {
+                await this.initStripeCard();
+            }, 0);
+        }
+    }
+
+    async initStripeCard() {
+        this.stripe = await loadStripe('my_publishable_key') as Stripe;
+        this.elements = this.stripe.elements();
+        this.card = this.elements.create('card');
+        this.card.mount(this.cardContainer.nativeElement);
+    }
+
+    async handleSubmit(event: Event, eventDetails: AppEvent) {
+        event.preventDefault();
+
+        const response = await firstValueFrom(
+            this.paymentService.createPaymentIntent(eventDetails.entryFee, eventDetails.id)
+        );
+
+        const result = await this.stripe.confirmCardPayment(
+            response.clientSecret,
+            {
+                payment_method: { card: this.card }
+            }
+        );
+
+        let paymentError = "";
+        let paymentIntentId = "";
+
+        if (result.error) {
+            paymentError = result.error.message!;
+            paymentIntentId = result.error.payment_intent!.id;
+        }
+        else {
+            paymentIntentId = result.paymentIntent!.id;
+        }
+
+        console.log("Payment: ", paymentIntentId, "Error: ", paymentError);
+
+        this.addEventRegistration(paymentIntentId, paymentError);
     }
 
     private syncUserToForm(u: UserAccount) {
@@ -93,8 +149,8 @@ export class EventComponent implements OnInit {
         }
 
         this.httpClient
-            .get<Event>(Config.api + url, Config.http_options())
-            .subscribe(res => this.event = res);
+            .get<AppEvent>(Config.api + url, Config.http_options())
+            .subscribe(res => this.loadedEvent = res);
     }
 
     toggleFavourite(eventClick: MouseEvent) {
@@ -110,22 +166,22 @@ export class EventComponent implements OnInit {
             event_Id: this.event_id
         };
 
-        if (this.event!.userFavourite) {
+        if (this.loadedEvent!.userFavourite) {
             this.httpClient
                 .delete(Config.api + '/FavouriteEvent/Delete', {
                     ...Config.http_options(),
                     body: body
                 })
                 .subscribe(() => {
-                    this.event!.userFavourite = false;
-                    this.event!.favouritedTimes--;
+                    this.loadedEvent!.userFavourite = false;
+                    this.loadedEvent!.favouritedTimes--;
                 });
         } else {
             this.httpClient
                 .post(Config.api + '/FavouriteEvent/Add', body, Config.http_options())
                 .subscribe(() => {
-                    this.event!.userFavourite = true;
-                    this.event!.favouritedTimes++;
+                    this.loadedEvent!.userFavourite = true;
+                    this.loadedEvent!.favouritedTimes++;
                 });
         }
     }
@@ -137,7 +193,7 @@ export class EventComponent implements OnInit {
             .subscribe(res => this.genders = res);
     }
 
-    openWizard() {
+    async openWizard() {
         if (this.loginInfo?.authentificationToken) {
             this.syncUserToForm(this.loginInfo.authentificationToken.userAccount);
         }
@@ -195,24 +251,36 @@ export class EventComponent implements OnInit {
     }
 
 
-    addEventRegistration() {
-        if (!this.loginInfo?.authentificationToken || !this.event) return;
+    addEventRegistration(paymentIntentId: string, paymentError: string) {
+        if (!this.loginInfo?.authentificationToken || !this.loadedEvent) return;
 
         const reg: EventRegistrationAdd = {
             userAccount_id: this.loginInfo.authentificationToken.userAccount.id,
-            event_id: this.event.id,
+            event_id: this.loadedEvent.id,
             club: this.club,
             shirtSize: this.shirtSize,
             numberOfFinishedRaces: this.numberOfFinishedRaces ?? undefined,
             eventDiscoverySource: this.eventDiscoverySource,
-            note: this.note
+            note: this.note,
+            stripePaymentIntentId: paymentIntentId,
+            stripeError: paymentError
         };
 
         this.httpClient
             .post(Config.api + '/EventRegistration/Add', reg, Config.http_options())
-            .subscribe(() => {
-                this.closeWizard();
-                alert('Successfully registered!');
+            .subscribe({
+                next: () => {
+                    this.closeWizard();
+                    alert('Successfully payed and registered!');
+                },
+                error: (err) => {
+                    console.log('Error response:', err);
+
+                    const message =
+                        err?.error || 'Registration failed. Please try again.';
+
+                    alert(message);
+                }
             });
     }
 
